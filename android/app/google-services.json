@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "742091642637",
+    "project_id": "royalprime-3658e",
+    "storage_bucket": "royalprime-3658e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742091642637:android:bba1aad2b3b63a3a888244",
+        "android_client_info": {
+          "package_name": "com.royal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "742091642637-ptpkb34tiff3irpbc57bc1e1ba4cama3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6hDbT5TPArNT_JpU5qO_5DwLgegbbXwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "742091642637-ptpkb34tiff3irpbc57bc1e1ba4cama3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
