@@ -124,9 +124,7 @@ const Tabs = () => {
           backgroundColor: Color.tabColor,
           ...styles.shadow,
         },
-      }}
-      tabBarOptions={{
-        showLabel: false,
+        tabBarShowLabel: false,
       }}>
       <Tab.Screen
         name="Film"

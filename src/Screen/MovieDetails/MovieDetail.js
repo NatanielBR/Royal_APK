@@ -58,6 +58,8 @@ const MovieDetail = ({navigation, route}) => {
   //
   const [playerIdArray, setPlayerIdArray] = useState([]);
   const [playerId, setPlayerId] = useState('');
+  const [playerName, setPlayerName] = useState('');
+
   const [playerLink, setPlayerLink] = useState('');
 
   //
@@ -88,11 +90,9 @@ const MovieDetail = ({navigation, route}) => {
           'User-Agent': 'axios 0.21.1',
         },
       });
-      let Id = Item.playerId.split(',');
+      let Id = JSON.parse(Item.playerId);
       let Link = Item.playerLink.split(',');
       setPlayerIdArray(Id);
-      console.log(Id);
-      console.log(Link);
 
       for (let index = 0; index < Id.length; index++) {
         if (Id[index] === '' || Link[index] === '') {
@@ -104,6 +104,22 @@ const MovieDetail = ({navigation, route}) => {
       }
       return request;
     }
+
+    /* 
+       [
+        { 
+          "audio": "Dublado", 
+          "player": {"link": "https://www.fembed.com/v/", "name": "Fembed.com"}, 
+          "playerId": "/bat"
+        }, 
+        
+        { 
+          "audio": "Legendado", 
+          "player": {"link": "https://www.fembed.com/v/", "name": "Fembed.com"}, 
+          "playerId": "leg"
+        }
+      ]
+    */
 
     fetchs();
 
@@ -190,14 +206,20 @@ const MovieDetail = ({navigation, route}) => {
 
   async function loadVideo() {
     async function processFembed(url) {
-      let urls = url.split('/');
-      let id = urls[urls.length - 1];
-      return await axios
-        .post(`https://suzihaza.com/api/source/${id}`, {})
-        .then(res => {
-          console.log(`Fembed Request of '${res.request.url}': ${res.status}`);
-          return res.data.data[0].file;
-        });
+      try {
+        let urls = url.split('/');
+        let id = urls[urls.length - 1];
+        return await axios
+          .post(`https://vanfem.com/api/source/${id}`, {})
+          .then(res => {
+            console.log(
+              `Fembed Request of '${res.request.url}': ${res.status}`,
+            );
+            return res.data.data[0].file;
+          });
+      } catch (error) {
+        console.error(error.message);
+      }
     }
 
     async function processStreamSb(url) {
@@ -289,12 +311,63 @@ const MovieDetail = ({navigation, route}) => {
       );
     }
 
-    //let urlVideo = "https://suzihaza.com/v/2dl2zf26k-8wgqq"; // fembed
-    //// let urlVideo = "https://sbfull.com/e/dxfvlu4qanjx"; // streamSb
-    // let urlVideo = "https://dood.to/e/zeb6gsq889qs"; // dood
-    let urlVideo = `https://suzihaza.com/v${playerId}`; //steamtape
-    //let urlStream = await processStreamTape(urlVideo); // basta remover https://suzihaza.com/v/
-    let urlStream = await processFembed(urlVideo); // basta remover https://suzihaza.com/v/
+    let urlVideo = '';
+    let urlStream = '';
+
+    switch (playerName) {
+      case 'Fembed':
+        urlVideo = `https://suzihaza.com/v/${playerId}`;
+        urlStream = await processFembed(urlVideo);
+
+        ToastAndroid.show(urlVideo, ToastAndroid.LONG);
+
+        console.log('URL-VIDEO: ' + urlVideo);
+        console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
+        setHeaders({
+          Referer: urlVideo,
+          origin: playerLink,
+        });
+        setVideoUrl(urlStream);
+        break;
+
+      case 'StreamSb':
+        urlVideo = `https://sbfull.com/e/${playerId}`;
+        urlStream = await processStreamTape(urlVideo);
+        ToastAndroid.show(urlVideo, ToastAndroid.LONG);
+
+        console.log('URL-VIDEO: ' + urlVideo);
+        console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
+        setHeaders({
+          Referer: urlVideo,
+          //origin: playerLink,
+        });
+        setVideoUrl(urlStream);
+        break;
+
+      case 'Dood':
+        urlVideo = `https://dood.to/e/${playerId}`;
+        urlStream = await processDood(urlVideo);
+        ToastAndroid.show(urlVideo, ToastAndroid.LONG);
+
+        console.log('URL-VIDEO: ' + urlVideo);
+        console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
+        setHeaders({
+          Referer: urlVideo,
+        });
+        setVideoUrl(urlStream);
+        break;
+
+      default:
+        break;
+    }
+
+    /* //let urlVideo = 'https://suzihaza.com/v/2dl2zf26k-8wgqq'; // fembed
+    //urlVideo = 'https://sbfull.com/e/dxfvlu4qanjx'; // streamSb
+    //urlVideo = 'https://dood.to/e/zeb6gsq889qs'; // dood
+    //let urlVideo = `https://suzihaza.com/v/p18p6smpzw7-67l`; //steamtape
+    //urlStream = await processStreamTape(urlVideo); // basta remover https://suzihaza.com/v/
+    //let urlStream = await processFembed(urlVideo); // basta remover https://suzihaza.com/v/
+    urlStream = await processDood(urlVideo); // basta remover https://suzihaza.com/v/
     ToastAndroid.show(urlVideo, ToastAndroid.LONG);
     console.log('URL-VIDEO: ' + urlVideo);
     console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
@@ -302,11 +375,12 @@ const MovieDetail = ({navigation, route}) => {
     setHeaders({
       Referer: urlVideo,
     });
-    setVideoUrl(urlStream);
+    setVideoUrl(urlStream); */
   }
 
   useEffect(() => {
     loadVideo();
+    console.log(playerIdArray);
   }, [playerId]);
 
   return (
@@ -348,9 +422,11 @@ const MovieDetail = ({navigation, route}) => {
                 }}
                 key={i}
                 onPress={() => {
-                  setPlayerId(item);
+                  setPlayerId(item.playerId);
+                  setPlayerName(item.player.name);
+                  // setPlayerName(item.player.link);
                 }}>
-                <Text> Opção {i + 1} </Text>
+                <Text> {item.player.name} </Text>
               </TouchableOpacity>
             ))}
           </View>
