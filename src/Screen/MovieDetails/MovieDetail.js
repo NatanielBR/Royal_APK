@@ -1,13 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {
-    Image,
-    PermissionsAndroid,
-    ScrollView,
-    StatusBar,
-    Text,
-    ToastAndroid,
-    TouchableOpacity,
-    View,
+    Image, PermissionsAndroid, ScrollView, StatusBar, Text, ToastAndroid, TouchableOpacity, View,
 } from 'react-native';
 import {WebView} from 'react-native-webview';
 //import movieTrailer from 'movie-trailer';
@@ -32,28 +25,26 @@ function truncateYear(str, n) {
 }
 
 function DetailHead({Back, Trailer}) {
-    return (
-        <View style={styles.header}>
-            <StatusBar
-                translucent={true}
-                barStyle="light-content"
-                backgroundColor={'transparent'}
+    return (<View style={styles.header}>
+        <StatusBar
+            translucent={true}
+            barStyle="light-content"
+            backgroundColor={'transparent'}
+        />
+        <TouchableOpacity onPress={Back} style={{width: 40, height: 20}}>
+            <Image
+                source={BackIcon}
+                style={{width: '60%', height: '100%', tintColor: 'white'}}
             />
-            <TouchableOpacity onPress={Back} style={{width: 40, height: 20}}>
-                <Image
-                    source={BackIcon}
-                    style={{width: '60%', height: '100%', tintColor: 'white'}}
-                />
-            </TouchableOpacity>
+        </TouchableOpacity>
 
-            <TouchableOpacity onPress={Trailer} style={{width: 40, height: 30}}>
-                <Image
-                    source={trailerIcon}
-                    style={{width: '90%', height: '80%', tintColor: 'white'}}
-                />
-            </TouchableOpacity>
-        </View>
-    );
+        <TouchableOpacity onPress={Trailer} style={{width: 40, height: 30}}>
+            <Image
+                source={trailerIcon}
+                style={{width: '90%', height: '80%', tintColor: 'white'}}
+            />
+        </TouchableOpacity>
+    </View>);
 }
 
 const MovieDetail = ({navigation, route}) => {
@@ -88,8 +79,7 @@ const MovieDetail = ({navigation, route}) => {
         async function fetchs() {
             const request = await axios.get(url ? url : endPoints.drama, {
                 headers: {
-                    Accept: 'application/json',
-                    'User-Agent': 'axios 0.21.1',
+                    Accept: 'application/json', 'User-Agent': 'axios 0.21.1',
                 },
             });
             let Id = JSON.parse(Item.playerId);
@@ -127,15 +117,11 @@ const MovieDetail = ({navigation, route}) => {
 
         async function mode() {
             if (Type) {
-                const request = await axios.get(
-                    `${endPoints.seriesSeasonsRel}${Item.Imdbid} `,
-                    {
-                        headers: {
-                            Accept: 'application/json',
-                            'User-Agent': 'axios 0.21.1',
-                        },
+                const request = await axios.get(`${endPoints.seriesSeasonsRel}${Item.Imdbid} `, {
+                    headers: {
+                        Accept: 'application/json', 'User-Agent': 'axios 0.21.1',
                     },
-                );
+                },);
                 console.log(request.data.seasonsEpisodes.Seasons);
                 setSeasons(request.data.seasonsEpisodes.Seasons);
                 return request;
@@ -152,8 +138,7 @@ const MovieDetail = ({navigation, route}) => {
     }, [navigation, Item]);
 
     const BG = {
-        uri: `https://image.tmdb.org/t/p/original${Item.poster}`,
-        priority: FastImage.priority.normal,
+        uri: `https://image.tmdb.org/t/p/original${Item.poster}`, priority: FastImage.priority.normal,
     };
 
     const final = BG;
@@ -211,161 +196,135 @@ const MovieDetail = ({navigation, route}) => {
     const [headers, setHeaders] = useState({});
     const [playerVisible, setPlayerVisible] = useState("none");
 
-    async function loadVideo() {
-        async function processFembed(url) {
-            try {
-                let urls = url.split('/');
-                let id = urls[urls.length - 1];
-                return await axios
-                    .post(`https://vanfem.com/api/source/${id}`, {})
-                    .then(res => {
-                        console.log(
-                            `Fembed Request of '${res.request.url}': ${res.status}`,
-                        );
-                        return res.data.data[0].file;
-                    });
-            } catch (error) {
-                console.error(error.message);
-            }
-        }
-
-        async function processStreamSb(url) {
-            let id = url.split('/');
-            id = id[id.length - 1];
-            let text = `||${id}||||streamsb`;
-
+    async function processFembed(url) {
+        try {
+            let urls = url.split('/');
+            let id = urls[urls.length - 1];
             return await axios
-                .get(
-                    `https://viewsb.com/sources43/${text
-                        .split('')
-                        .reduce((hex, c) => (hex += c.charCodeAt(0).toString(16)), '')}/`,
-                )
+                .post(`https://vanfem.com/api/source/${id}`, {})
                 .then(res => {
-                    console.log(res.data);
-                    return res.data.stream_data.file;
+                    console.log(`Fembed Request of '${res.request.url}': ${res.status}`,);
+                    return res.data.data[0].file;
                 });
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    function doodRandomstr(length) {
+        let ab = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let ab_len = ab.length;
+
+        let sb = '';
+
+        for (let i = 0; i < length; i++) {
+            sb += ab[Math.trunc(Math.random() * ab_len)];
         }
 
-        function doodRandomstr(length) {
-            let ab = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let ab_len = ab.length;
+        return sb;
+    }
 
-            let sb = '';
+    async function processDood(url) {
+        let url_base = 'https://dood.to/';
 
-            for (let i = 0; i < length; i++) {
-                sb += ab[Math.trunc(Math.random() * ab_len)];
-            }
+        let [md5Url, urlPart2] = await axios.get(url).then(res => {
+            let html = res.data;
 
-            return sb;
-        }
+            return [RegExp("\\$\\.get\\('(\\/pass_md5[/\\d-\\w]+)'").exec(html)[1], RegExp('makePlay.+?return[^?]+([^"]+)').exec(html)[1],];
+        });
 
-        async function processDood(url) {
-            let url_base = 'https://dood.to/';
-
-            let [md5Url, urlPart2] = await axios.get(url).then(res => {
-                let html = res.data;
-
-                return [
-                    RegExp("\\$\\.get\\('(\\/pass_md5[/\\d-\\w]+)'").exec(html)[1],
-                    RegExp('makePlay.+?return[^?]+([^"]+)').exec(html)[1],
-                ];
+        let urlPart = await axios
+            .get(url_base + md5Url, {
+                headers: {
+                    Referer: url,
+                },
+            })
+            .then(res => {
+                return res.data;
             });
 
-            let urlPart = await axios
-                .get(url_base + md5Url, {
-                    headers: {
-                        Referer: url,
-                    },
-                })
-                .then(res => {
-                    return res.data;
-                });
+        console.log(urlPart);
+        console.log(urlPart2);
 
-            console.log(urlPart);
-            console.log(urlPart2);
+        return urlPart + doodRandomstr(10) + urlPart2 + Date.now() / 100;
+    }
 
-            return urlPart + doodRandomstr(10) + urlPart2 + Date.now() / 100;
-        }
+    async function processStreamTape(url) {
+        let [token, urlPart] = await axios
+            .get(url, {
+                headers: {
+                    Accept: '*/*',
+                    'User-Agent': 'Mozilla/5.0 (Linux; Android 7.0; SM-G892A Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/60.0.3112.107 Mobile Safari/537.36 ',
+                },
+            })
+            .then(res => {
+                let html = res.data;
+                return [html
+                    .match(RegExp('<script>[\\r\\n\\s\\S]+?</script>', 'g'))
+                    .join('')
+                    .match(RegExp("&token=([^s]*)'\\)"))[1], RegExp(`<div\\s+id="ideoolink"[\\s\\w="':;]+>(.+)</div>`, 'g').exec(html,)[1],];
+            });
 
-        async function processStreamTape(url) {
-            let [token, urlPart] = await axios
-                .get(url, {
-                    headers: {
-                        Accept: '*/*',
-                        'User-Agent':
-                            'Mozilla/5.0 (Linux; Android 7.0; SM-G892A Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/60.0.3112.107 Mobile Safari/537.36 ',
-                    },
-                })
-                .then(res => {
-                    let html = res.data;
-                    return [
-                        html
-                            .match(RegExp('<script>[\\r\\n\\s\\S]+?</script>', 'g'))
-                            .join('')
-                            .match(RegExp("&token=([^s]*)'\\)"))[1],
-                        RegExp(`<div\\s+id="ideoolink"[\\s\\w="':;]+>(.+)</div>`, 'g').exec(
-                            html,
-                        )[1],
-                    ];
-                });
+        return ('https:/' + urlPart.substring(0, urlPart.lastIndexOf('=')) + '=' + token + '&stream=1');
+    }
 
-            return (
-                'https:/' +
-                urlPart.substring(0, urlPart.lastIndexOf('=')) +
-                '=' +
-                token +
-                '&stream=1'
-            );
-        }
+    async function loadVideo() {
 
-        let urlVideo = '';
-        let urlStream = '';
+        try {
+            let urlVideo = '';
+            let urlStream = '';
 
-        switch (playerName) {
-            case 'Fembed':
-                urlVideo = `https://suzihaza.com/v/${playerId}`;
-                urlStream = await processFembed(urlVideo);
+            switch (playerName) {
+                case 'Fembed':
+                    urlVideo = `https://suzihaza.com/v/${playerId}`;
+                    urlStream = await processFembed(urlVideo);
 
-                ToastAndroid.show(urlVideo, ToastAndroid.LONG);
+                    ToastAndroid.show(urlVideo, ToastAndroid.LONG);
 
-                console.log('URL-VIDEO: ' + urlVideo);
-                console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
-                setHeaders({
-                    Referer: urlVideo,
-                    origin: playerLink,
-                });
-                setVideoUrl(urlStream);
-                break;
+                    console.log('URL-VIDEO: ' + urlVideo);
+                    console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
+                    setHeaders({
+                        Referer: urlVideo, origin: playerLink,
+                    });
+                    setVideoUrl(urlStream);
+                    break;
 
-            case 'StreamSb':
-                urlVideo = `https://sbfull.com/e/${playerId}`;
-                urlStream = await processStreamTape(urlVideo);
-                ToastAndroid.show(urlVideo, ToastAndroid.LONG);
+                case 'StreamSb':
+                    urlVideo = `https://sbfull.com/e/${playerId}`;
+                    urlStream = await processStreamTape(urlVideo);
+                    ToastAndroid.show(urlVideo, ToastAndroid.LONG);
 
-                console.log('URL-VIDEO: ' + urlVideo);
-                console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
-                setHeaders({
-                    Referer: urlVideo,
-                    //origin: playerLink,
-                });
-                setVideoUrl(urlStream);
-                break;
+                    console.log('URL-VIDEO: ' + urlVideo);
+                    console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
+                    setHeaders({
+                        Referer: urlVideo, //origin: playerLink,
+                    });
+                    setVideoUrl(urlStream);
+                    break;
 
-            case 'Dood':
-                urlVideo = `https://dood.to/e/${playerId}`;
-                urlStream = await processDood(urlVideo);
-                ToastAndroid.show(urlVideo, ToastAndroid.LONG);
+                case 'Dood':
+                    urlVideo = `https://dood.to/e/${playerId}`;
+                    urlStream = await processDood(urlVideo);
+                    ToastAndroid.show(urlVideo, ToastAndroid.LONG);
 
-                console.log('URL-VIDEO: ' + urlVideo);
-                console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
-                setHeaders({
-                    Referer: urlVideo,
-                });
-                setVideoUrl(urlStream);
-                break;
+                    console.log('URL-VIDEO: ' + urlVideo);
+                    console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
+                    setHeaders({
+                        Referer: urlVideo,
+                    });
+                    setVideoUrl(urlStream);
+                    break;
 
-            default:
-                break;
+                default:
+                    return
+            }
+
+            setPlayerVisible("flex")
+        } catch (e) {
+            ToastAndroid.show("Error in load video", ToastAndroid.LONG)
+            setPlayerVisible("none")
+            setHeaders({});
+            setVideoUrl(null);
         }
 
         /* //let urlVideo = 'https://suzihaza.com/v/2dl2zf26k-8wgqq'; // fembed
@@ -387,237 +346,199 @@ const MovieDetail = ({navigation, route}) => {
 
     useEffect(() => {
         loadVideo();
-        console.log(playerIdArray);
+        console.log(playerVisible);
     }, [playerId]);
 
-    return (
-        <View style={styles.body}>
-            <Header/>
-            <ScrollView style={styles.scrollBody}>
-                <View style={styles.container}>
+    return (<View style={styles.body}>
+        <Header/>
+        <ScrollView style={styles.scrollBody}>
+            <View style={styles.container}>
 
 
-                    <Animatable.View
-                        style={styles.posterContainer}
-                        animation="bounceIn"
-                        iterationCount={1}>
-                        <FastImage
-                            resizeMode="cover"
-                            source={final}
-                            style={styles.poster}
-                        />
-                    </Animatable.View>
+                <Animatable.View
+                    style={styles.posterContainer}
+                    animation="bounceIn"
+                    iterationCount={1}>
+                    <FastImage
+                        resizeMode="cover"
+                        source={final}
+                        style={styles.poster}
+                    />
+                </Animatable.View>
 
-                    <View style={styles.details}>
-                        <Text style={styles.title}>{Item.title || Item.name}</Text>
-                        <Text style={styles.vote_average}> {Item.ratings}/10 </Text>
-                    </View>
+                <View style={styles.details}>
+                    <Text style={styles.title}>{Item.title || Item.name}</Text>
+                    <Text style={styles.vote_average}> {Item.ratings}/10 </Text>
+                </View>
 
-                    <View style={{paddingHorizontal: 5}}>
-                        <Text style={styles.overviewTxt}>{Item.plot}</Text>
-                    </View>
-                    {Type ? (
-                        <View/>
-                    ) : (
+                <View style={{paddingHorizontal: 5}}>
+                    <Text style={styles.overviewTxt}>{Item.plot}</Text>
+                </View>
+                {Type ? (<View/>) : (<View style={{
+                        width: '100%', height: '100%', marginBottom: 80, maxHeight: 250
+                    }}>
+                        <View
+                            style={{
+                                flexDirection: 'row', paddingHorizontal: '20%', padding: 3, marginBottom: 4,
+                            }}>
+
+                            {playerIdArray.map((item, i) => (<TouchableOpacity
+                                style={{
+                                    backgroundColor: '#fff',
+                                    paddingHorizontal: 20,
+                                    paddingVertical: 4,
+                                    marginHorizontal: 8,
+                                    borderRadius: 4,
+                                    marginBottom: 4,
+                                }}
+                                key={i}
+                                onPress={() => {
+                                    setPlayerId(item.playerId);
+                                    setPlayerName(item.player.name);
+                                    // setPlayerName(item.player.link);
+                                }}>
+                                <Text> {item.player.name} </Text>
+                            </TouchableOpacity>))}
+
+                        </View>
+
                         <View style={{
                             width: '100%',
-                            height: '20%',
-                            marginBottom: 80,
+                            height: '100%',
+                            maxHeight: 250,
+                            backgroundColor: 'gray',
+                            marginBottom: 0,
+                            display: playerVisible,
                         }}>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    paddingHorizontal: '20%',
-                                    padding: 3,
-                                    marginBottom: 4,
-                                }}>
 
-                                {playerIdArray.map((item, i) => (
-                                    <TouchableOpacity
-                                        style={{
-                                            backgroundColor: '#fff',
-                                            paddingHorizontal: 20,
-                                            paddingVertical: 4,
-                                            marginHorizontal: 8,
-                                            borderRadius: 4,
-                                            marginBottom: 4,
-                                        }}
-                                        key={i}
-                                        onPress={() => {
-                                            setPlayerId(item.playerId);
-                                            setPlayerName(item.player.name);
-                                            setPlayerVisible("flex")
-                                            // setPlayerName(item.player.link);
-                                        }}>
-                                        <Text> {item.player.name} </Text>
-                                    </TouchableOpacity>
-                                ))}
+                            <WebView
+                                source={{
+                                    uri: videoUrl, headers: headers,
+                                }}
+                                allowsFullscreenVideo={true}
+                                style={{flex: 1, width: '100%', height: '100%'}}
+                            >
 
-                            </View>
+                            </WebView>
 
-                            <View style={{
-                                width: '100%',
-                                height: '100%',
-                                maxHeight: 250,
-                                backgroundColor: 'gray',
-                                marginBottom: 0,
+                            {/*<WebView*/}
+                            {/*    style={{flex: 1, width: '100%', height: '100%'}}*/}
+                            {/*    source={{*/}
+                            {/*        headers: headers,*/}
+                            {/*        uri: videoUrl,*/}
+                            {/*    }}*/}
+                            {/*    allowsFullscreenVideo={true}*/}
+                            {/*/>*/}
+                        </View>
+
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                marginHorizontal: '25%',
+                                padding: 3,
+                                marginBottom: 4,
                                 display: playerVisible,
                             }}>
 
-                                <WebView
-                                    source={{
-                                        uri: videoUrl,
-                                        headers: headers,
-                                    }}
-                                    allowsFullscreenVideo={true}
-                                    style={{flex: 1, width: '100%', height: '100%'}}
-                                >
-
-                                </WebView>
-
-                                {/*<WebView*/}
-                                {/*    style={{flex: 1, width: '100%', height: '100%'}}*/}
-                                {/*    source={{*/}
-                                {/*        headers: headers,*/}
-                                {/*        uri: videoUrl,*/}
-                                {/*    }}*/}
-                                {/*    allowsFullscreenVideo={true}*/}
-                                {/*/>*/}
-                            </View>
-
-                            <View
+                            <TouchableOpacity
                                 style={{
-                                    flexDirection: 'row',
-                                    marginHorizontal: '25%',
-                                    padding: 3,
+                                    backgroundColor: '#fff',
+                                    paddingHorizontal: 40,
+                                    paddingVertical: 4,
+                                    marginHorizontal: 8,
+                                    borderRadius: 4,
                                     marginBottom: 4,
-                                    display: playerVisible,
+                                }}
+                                onPress={() => {
+                                    const fileName = Item.title.replace(':', '') + ".mp4"
+                                    console.log("Clicando " + fileName)
+                                    const destPath = RNFetchBlob.fs.dirs.DownloadDir + '/' + fileName;
+
+                                    // const config = {
+                                    //     fileCache: true,
+                                    //     path: destPath,
+                                    //     addAndroidDownloads: {
+                                    //         title: destPath,
+                                    //         useDownloadManager: true, // without this it works < android 10 , but crashes in android 10
+                                    //         notification: true,
+                                    //         mime: mimeType,
+                                    //         mediaScannable: true,
+                                    //     }
+                                    // };
+
+                                    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,).then(granted => {
+                                        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                                            RNFetchBlob.config({
+                                                fileCache: true, path: destPath, addAndroidDownloads: {
+                                                    path: destPath, // path needed duplicating here
+                                                    useDownloadManager: true, // without this it works < android 10 , but crashes in android 10
+                                                    notification: true, title: 'Teste', mediaScannable: true,
+                                                },
+                                            }).fetch("GET", videoUrl, headers)
+
+
+                                        }
+                                    })
+
+                                    // RNFetchBlob.config(config).fetch()
                                 }}>
+                                <Text> {"Download"} </Text>
+                            </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    style={{
-                                        backgroundColor: '#fff',
-                                        paddingHorizontal: 40,
-                                        paddingVertical: 4,
-                                        marginHorizontal: 8,
-                                        borderRadius: 4,
-                                        marginBottom: 4,
-                                    }}
-                                    onPress={() => {
-                                        const fileName = Item.title.replace(':', '') + ".mp4"
-                                        console.log("Clicando " + fileName)
-                                        const destPath = RNFetchBlob.fs.dirs.DownloadDir + '/' + fileName;
-
-                                        // const config = {
-                                        //     fileCache: true,
-                                        //     path: destPath,
-                                        //     addAndroidDownloads: {
-                                        //         title: destPath,
-                                        //         useDownloadManager: true, // without this it works < android 10 , but crashes in android 10
-                                        //         notification: true,
-                                        //         mime: mimeType,
-                                        //         mediaScannable: true,
-                                        //     }
-                                        // };
-
-                                        PermissionsAndroid.request(
-                                            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                                        ).then(granted => {
-                                            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                                                RNFetchBlob.config({
-                                                    fileCache: true,
-                                                    path: destPath,
-                                                    addAndroidDownloads: {
-                                                        path: destPath, // path needed duplicating here
-                                                        useDownloadManager: true, // without this it works < android 10 , but crashes in android 10
-                                                        notification: true,
-                                                        title: 'Teste',
-                                                        mediaScannable: true,
-                                                    },
-                                                }).fetch("GET", videoUrl, headers)
-
-
-                                            }
-                                        })
-
-
-                                        // RNFetchBlob.config(config).fetch()
-                                    }}>
-                                    <Text> {"Download"} </Text>
-                                </TouchableOpacity>
-
-                            </View>
                         </View>
+                    </View>
 
-                    )}
-                    <View style={styles.hr}></View>
-                    {Type ? (
-                        <View style={styles.seasonsBox}>
-                            <Text style={styles.seasonTxt}>Temporadas</Text>
-                            <ScrollView
-                                horizontal
-                                style={{width: '100%', height: 250, marginTop: 2}}>
-                                <View style={styles.seasonContainer}>
-                                    {seasons.length > 0 ? (
-                                        seasons.map(item => {
-                                            return (
-                                                <Animatable.View
-                                                    animation="bounceIn"
-                                                    iterationCount={1}
-                                                    key={item.id}
-                                                    style={styles.seasonCard}>
-                                                    <TouchableOpacity
-                                                        onPress={() => {
-                                                            navigation.navigate('Episodes', {
-                                                                Data: item,
-                                                            });
-                                                        }}
-                                                        style={styles.seasonBtn}>
-                                                        <Text
-                                                            style={{
-                                                                fontSize: 16,
-                                                                fontWeight: '400',
-                                                                color: '#fff',
-                                                                marginBottom: 16,
-                                                            }}>
-                                                            Temporada {item.season}{' '}
-                                                        </Text>
-                                                        <Text
-                                                            style={{
-                                                                fontSize: 14,
-                                                                fontWeight: '400',
-                                                                color: '#fff',
-                                                            }}>
-                                                            {item.name}
-                                                        </Text>
-                                                    </TouchableOpacity>
-                                                </Animatable.View>
-                                            );
-                                        })
-                                    ) : (
+                )}
+                <View style={styles.hr}></View>
+                {Type ? (<View style={styles.seasonsBox}>
+                    <Text style={styles.seasonTxt}>Temporadas</Text>
+                    <ScrollView
+                        horizontal
+                        style={{width: '100%', height: 250, marginTop: 2}}>
+                        <View style={styles.seasonContainer}>
+                            {seasons.length > 0 ? (seasons.map(item => {
+                                return (<Animatable.View
+                                    animation="bounceIn"
+                                    iterationCount={1}
+                                    key={item.id}
+                                    style={styles.seasonCard}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            navigation.navigate('Episodes', {
+                                                Data: item,
+                                            });
+                                        }}
+                                        style={styles.seasonBtn}>
                                         <Text
                                             style={{
-                                                fontSize: 16,
-                                                fontWeight: '400',
-                                                color: '#fff',
+                                                fontSize: 16, fontWeight: '400', color: '#fff', marginBottom: 16,
                                             }}>
-                                            Empty
+                                            Temporada {item.season}{' '}
                                         </Text>
-                                    )}
-                                </View>
-                            </ScrollView>
+                                        <Text
+                                            style={{
+                                                fontSize: 14, fontWeight: '400', color: '#fff',
+                                            }}>
+                                            {item.name}
+                                        </Text>
+                                    </TouchableOpacity>
+                                </Animatable.View>);
+                            })) : (<Text
+                                style={{
+                                    fontSize: 16, fontWeight: '400', color: '#fff',
+                                }}>
+                                Empty
+                            </Text>)}
                         </View>
-                    ) : (
-                        <MovieRow
-                            requested={Type === true ? suggested : url}
-                            Genre={'Mais do género'}
-                            type={Type}
-                        />
-                    )}
-                </View>
-            </ScrollView>
-        </View>
-    );
+                    </ScrollView>
+                </View>) : (<MovieRow
+                    requested={Type === true ? suggested : url}
+                    Genre={'Mais do género'}
+                    type={Type}
+                />)}
+            </View>
+        </ScrollView>
+    </View>);
 };
 
 export default MovieDetail;
