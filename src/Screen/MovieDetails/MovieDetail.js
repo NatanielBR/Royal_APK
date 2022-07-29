@@ -437,7 +437,7 @@ const MovieDetail = ({navigation, route}) => {
                                 marginHorizontal: '25%',
                                 padding: 3,
                                 marginBottom: 4,
-                                display: playerVisible,
+                                display: 'none',
                             }}>
 
                             <TouchableOpacity
