@@ -84,6 +84,8 @@ export default function Home() {
                 request.data.results.rows[getRandomSafe(request.data.results.rows.length)],
             );
 
+            console.log(request.data.results.rows)
+
             setBannerDisplay('flex')
 
             return request;
@@ -133,7 +135,13 @@ export default function Home() {
 
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('MovieD', {Item: banner});
+                        // console.log(banner, "bla")
+                        // navigation.navigate('MovieD', {Item: banner});
+                        navigation.navigate('MovieD', {
+                            Item: banner,
+                            ID: banner.Imdbid,
+                            url: endPoints.all,
+                        });
                     }}
                     style={styles.watchBtn}>
                     <Text style={{color: 'white'}}>Assistir</Text>
