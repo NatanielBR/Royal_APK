@@ -145,6 +145,10 @@ const MovieDetail = ({navigation, route}) => {
         mode();
         // noinspection JSIgnoredPromiseFromCall
         loadVideo();
+
+        navigation.addListener('beforeRemove', data => {
+            console.log(data)
+        })
     }, [navigation, Item]);
 
     const BG = {
