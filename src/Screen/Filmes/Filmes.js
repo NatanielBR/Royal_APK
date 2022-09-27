@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, ScrollView} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, ScrollView } from 'react-native';
 
 import endPoints from '../../API/EndPoints';
 
@@ -18,6 +18,8 @@ const Filmes = () => {
     drama: `${endPoints.genre}drama`,
     documentaries: `${endPoints.genre}documentário`,
   };
+
+  console.log(fecthes.action)
 
   return (
     <View style={styles.body}>

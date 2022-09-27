@@ -12,6 +12,8 @@ target 'Royal' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-google-cast', :path => '../node_modules/react-native-google-cast'
+
   target 'RoyalTests' do
     inherit! :complete
     # Pods for testing

@@ -14,7 +14,7 @@ import Notification from '../Screen/Notification/Not';
 
 import Logo from '../Assets/Logo/Logo-Royal-Prime_TH1.png';
 import MenuI from '../Assets/Icons/list.png';
-import Bell from '../Assets/Icons/bell.png';
+import Bell from '../Assets/Icons/notification.png';
 
 function HeadButtons(props) {
   return (
@@ -56,7 +56,7 @@ const BannerHeader = props => {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={toggleNotification}>
-          <Image style={styles.icons} source={Bell} />
+          <Image style={styles.iconNotifications} source={Bell} />
         </TouchableOpacity>
 
         <Menu />
@@ -91,4 +91,8 @@ const styles = StyleSheet.create({
     height: 18,
     tintColor: 'white',
   },
+  iconNotifications: {
+    width: 25,
+    height: 25,
+  }
 });

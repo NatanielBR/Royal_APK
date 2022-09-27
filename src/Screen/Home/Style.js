@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   movieName: {
-    fontSize: 20,
+    fontSize: 22,
     color: 'white',
     fontWeight: 'bold',
   },
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   movieRate: {
-    fontSize: 9,
+    fontSize: 10,
     color: 'white',
   },
   watchBtn: {

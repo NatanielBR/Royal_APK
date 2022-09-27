@@ -11,16 +11,17 @@ export function MyListContextProvider(props) {
 
 
   const handleSetMyList = async (item) => {
-    const request = await AsyncStorage.getItem('myList');
-    const requestParse = JSON.parse(request);
+    console.log('chamou')
 
+    const verifyFilmeExist = myList.some((filme) => filme.id === item.id);
 
+    if (!verifyFilmeExist) {
 
-    const newList = [...requestParse, item];
+      setMyList([...myList, item]);
+    }
 
-    // const checkExists = newList.some((movie) => movie.Imdbid === item.Imdbid);
+    return;
 
-    await AsyncStorage.setItem('myList', JSON.stringify(newList));
   }
 
 

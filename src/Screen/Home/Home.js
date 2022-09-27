@@ -127,6 +127,7 @@ export default function Home() {
         uri: `https://image.tmdb.org/t/p/original${banner?.poster}`,
     };
 
+
     return (
         <ImageBackground
             source={final}
@@ -146,7 +147,7 @@ export default function Home() {
                     {stat.status == 'Released' ? 'Já disponível' : ''}
                 </Text>
                 <Text style={styles.movieName}>{truncate(banner?.title, 16)}</Text>
-                <Text style={styles.movieRate}>{banner?.ratings}/10</Text>
+                <Text style={styles.movieRate}>{banner?.genre}</Text>
 
                 <TouchableOpacity
                     onPress={() => {
@@ -159,8 +160,8 @@ export default function Home() {
                         });
                     }}
                     style={styles.watchBtn}>
-                    <Text style={{ color: 'white' }}>Assistir</Text>
-                    <Image source={PlayIcon} style={styles.icon} />
+                    <Text style={{ color: 'white', fontSize: 19 }}>Assistir</Text>
+                    <Image source={PlayIcon} style={style.iconsPlay} />
                 </TouchableOpacity>
             </View>
 
@@ -235,4 +236,10 @@ const style = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: Colors.bGColor,
     },
+
+    iconsPlay: {
+        width: 30,
+        height: 30,
+        marginLeft: 10,
+    }
 });

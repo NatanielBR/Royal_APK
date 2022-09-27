@@ -10,20 +10,22 @@ import ImageClose from '../../Assets/Icons/left-arrow.png';
 
 export default function Lista() {
   const [listStorage, setListStorage] = useState([]);
-
+  const { myList } = useContext(MyListContext);
   const navigation = useNavigation();
 
 
-  useEffect(() => {
-    async function fetchListStorage() {
-      const request = await AsyncStorage.getItem('myList');
-
-      setListStorage(JSON.parse(request));
-    }
-    fetchListStorage();
-  }, []);
+  // useEffect(() => {
+  //   async function fetchListStorage() {
+  //     const request = await AsyncStorage.getItem('myList');
 
 
+  //     console.log(request)
+  //     // setListStorage(JSON.parse(request));
+  //   }
+  //   fetchListStorage();
+  // }, []);
+
+  console.log('listStorage', myList);
 
 
 
@@ -49,7 +51,7 @@ export default function Lista() {
       <ScrollView
         overScrollMode="never">
         <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap' }}>
-          {listStorage?.map((movie, index) => {
+          {myList?.map((movie, index) => {
             return (
               <TouchableOpacity
                 key={index}

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -17,7 +17,7 @@ import MoviePoster from '../../Components/MoviePoster';
 import axios from '../../API/RoyalApi';
 import endPoints from '../../API/EndPoints';
 
-const Series = ({navigation}) => {
+const Series = ({ navigation }) => {
   const [series, setSeries] = useState([]);
 
   useEffect(() => {
@@ -32,8 +32,8 @@ const Series = ({navigation}) => {
     <View style={styles.body}>
       <Header />
 
-      <View style={{flex: 1, width: '100%', paddingBottom: 16}}>
-        <ScrollView style={{width: '100%', flex: 1}}>
+      <View style={{ flex: 1, width: '100%', paddingBottom: 16 }}>
+        <ScrollView style={{ width: '100%', flex: 1 }}>
           <View style={styles.seriesRow}>
             {series.map(serie => {
               return (

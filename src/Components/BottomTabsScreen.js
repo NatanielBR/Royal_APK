@@ -20,7 +20,7 @@ import Filmes from '../Screen/Filmes/Filmes';
 import MovieD from '../Screen/MovieDetails/MovieDetail';
 import Episodes from '../Screen/Episodes/Episodes';
 
-import PlayIcon from '../Assets/Icons/play.png';
+import PlayIcon from '../Assets/Icons/playTranparent.png';
 import SerieIcon from '../Assets/Icons/film-reel.png';
 import DownloadsIcon from '../Assets/Icons/cloud-download.png';
 import AnimeIcon from '../Assets/Icons/anime-berserk.png';
