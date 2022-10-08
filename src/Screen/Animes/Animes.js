@@ -37,7 +37,6 @@
 //     fetch();
 //   }, [navigation]);
 
-
 //   console.log(anime)
 
 //   return (
@@ -114,7 +113,7 @@ const Animes = ({ navigation }) => {
 
   useEffect(() => {
     navigation.addListener('focus', async function fetch() {
-      const req = await axios.get(`${endPoints.allSeries}`);
+      const req = await axios.get(`${endPoints.getAnime}`);
       setSeries(req.data.results.rows);
       return req;
     });

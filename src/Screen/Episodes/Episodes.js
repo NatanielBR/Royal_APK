@@ -160,29 +160,7 @@ const Episodes = ({ navigation, route }) => {
       <Header />
       <ScrollView style={styles.scrollBody}>
         <View style={styles.container}>
-          <View style={styles.videoPlayer}>
-            <View
-              style={{
-                flexDirection: 'column',
-                width: '100%',
-                height: '100%',
-                maxHeight: 250,
-                marginBottom: 0,
-                display: playerVisible,
-              }}>
-              {playerName ? (
-                <WebView
-                  source={{
-                    uri: videoUrl,
-                    headers: headers,
-                  }}
-                  allowsFullscreenVideo={true}
-                  style={{ flex: 1, width: '100%', height: '100%' }}></WebView>
-              ) : (
-                <View />
-              )}
-            </View>
-          </View>
+
 
           <View
             style={{
@@ -223,8 +201,34 @@ const Episodes = ({ navigation, route }) => {
           <View style={styles.warnTxt}>
             <Text style={styles.warnTxt1}>
               Episódios da {Data.season}ª Temporada{' '}
+
             </Text>
           </View>
+
+          <View style={styles.videoPlayer}>
+            <View
+              style={{
+                flexDirection: 'column',
+                width: '100%',
+                height: '100%',
+                maxHeight: 250,
+                marginBottom: 0,
+                display: playerVisible,
+              }}>
+              {playerName ? (
+                <WebView
+                  source={{
+                    uri: videoUrl,
+                    headers: headers,
+                  }}
+                  allowsFullscreenVideo={true}
+                  style={{ flex: 1, width: '100%', height: '100%' }}></WebView>
+              ) : (
+                <View />
+              )}
+            </View>
+          </View>
+
 
           <ScrollView
             horizontal
