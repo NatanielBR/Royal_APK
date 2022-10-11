@@ -21,11 +21,13 @@ const Series = ({ navigation }) => {
   const [series, setSeries] = useState([]);
 
   useEffect(() => {
-    navigation.addListener('focus', async function fetch() {
+    async function fetch() {
       const req = await axios.get(`${endPoints.allSeries}`);
       setSeries(req.data.results.rows);
       return req;
-    });
+    }
+
+    fetch();
   }, []);
 
   return (

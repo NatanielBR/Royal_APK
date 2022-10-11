@@ -164,7 +164,8 @@ const Tabs = () => {
               </View>
             </TouchableOpacity>
           ),
-        }}></Tab.Screen>
+        }}
+      />
 
       <Tab.Screen
         name="Film"
@@ -201,7 +202,8 @@ const Tabs = () => {
               </View>
             </TouchableOpacity>
           ),
-        }}></Tab.Screen>
+        }}
+      />
 
       <Tab.Screen
         name="Séries"
@@ -238,7 +240,8 @@ const Tabs = () => {
               </View>
             </TouchableOpacity>
           ),
-        }}></Tab.Screen>
+        }}
+      />
 
       <Tab.Screen
         name="AnimeD"
@@ -311,8 +314,6 @@ const Tabs = () => {
     </Tab.Navigator>
   );
 };
-
-
 
 export default Tabs;
 

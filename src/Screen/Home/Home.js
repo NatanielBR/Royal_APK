@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     Image,
     ScrollView,
+    ActivityIndicator,
 } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -127,6 +128,8 @@ export default function Home() {
         uri: `https://image.tmdb.org/t/p/original${banner?.poster}`,
     };
 
+
+    if (!banner && !rand) return <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}> <ActivityIndicator size={50} /></View>
 
     return (
         <ImageBackground

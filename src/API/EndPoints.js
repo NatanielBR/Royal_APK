@@ -9,7 +9,7 @@ const EndPoints = {
   allSeries: '/series/management/all?page=1&limit=20',
   seriesRel: '/series/management/rel/',
   seriesSeasonsRel: '/series/management/seasons-rel/',
-  getAnime: 'series/management/animes/all',
+  getAnime: '/series/management/animes/all?page=1&limit=100',
 };
 
 export default EndPoints;

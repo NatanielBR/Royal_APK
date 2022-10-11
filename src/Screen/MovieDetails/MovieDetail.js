@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
+import RNBackgroundDownloader from 'react-native-background-downloader';
 import * as Animatable from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 
@@ -233,6 +234,29 @@ const MovieDetail = ({ navigation, route }) => {
     );
   }
 
+  let task = RNBackgroundDownloader.download({
+    id: 'file123',
+    url: 'https://link-to-very.large/file.zip',
+    destination: `${RNBackgroundDownloader.directories.documents}/file.zip`
+  }).begin((expectedBytes) => {
+    console.log(`Going to download ${expectedBytes} bytes!`);
+  }).progress((percent) => {
+    console.log(`Downloaded: ${percent * 100}%`);
+  }).done(() => {
+    console.log('Download is done!');
+  }).error((error) => {
+    console.log('Download canceled due to error: ', error);
+  });
+
+  // Pause the task
+  task.pause();
+
+  // Resume after pause
+  task.resume();
+
+  // Cancel the task
+  task.stop()
+
   async function loadVideo() {
     try {
       let urlVideo = '';
@@ -377,6 +401,8 @@ const MovieDetail = ({ navigation, route }) => {
             <Text style={styles.overviewTxt}>{Item.plot}</Text>
           </View>
 
+
+
           {Type ? (
             <View />
           ) : (
@@ -435,6 +461,11 @@ const MovieDetail = ({ navigation, route }) => {
                 ) : (
                   <View />
                 )}
+
+
+
+
+
                 <View
                   style={{
                     flexDirection: 'row',
@@ -444,29 +475,26 @@ const MovieDetail = ({ navigation, route }) => {
                   <CastButton
                     style={{ width: 24, height: 24, tintColor: 'white' }}
                   />
+                  {/* 
+                  <TouchableOpacity>
+                    <Text style={{ color: '#fff', marginLeft: 10 }}>download</Text>
+                  </TouchableOpacity> */}
 
                   <Text style={{ color: 'white', marginLeft: 8 }}>
                     Cast do Filme{' '}
                   </Text>
                 </View>
-              </View>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginHorizontal: '25%',
-                  padding: 3,
-                  marginBottom: 4,
-                  display: 'none',
-                }}>
+
                 <TouchableOpacity
                   style={{
-                    backgroundColor: '#fff',
-                    paddingHorizontal: 40,
-                    paddingVertical: 4,
-                    marginHorizontal: 8,
-                    borderRadius: 4,
-                    marginBottom: 4,
+
+                    position: 'relative',
+                    left: 20,
+                    right: 0,
+                    top: -22,
+
+
                   }}
                   onPress={() => {
                     const fileName = Item.title.replace(':', '') + '.mp4';
@@ -497,7 +525,7 @@ const MovieDetail = ({ navigation, route }) => {
                             path: destPath, // path needed duplicating here
                             useDownloadManager: true, // without this it works < android 10 , but crashes in android 10
                             notification: true,
-                            title: 'Teste',
+                            title: playerName,
                             mediaScannable: true,
                           },
                         }).fetch('GET', videoUrl, headers);
@@ -506,9 +534,10 @@ const MovieDetail = ({ navigation, route }) => {
 
                     // RNFetchBlob.config(config).fetch()
                   }}>
-                  <Text> {'Download'} </Text>
+                  <Text style={{ color: 'white', marginLeft: 8 }}> {'Download'} </Text>
                 </TouchableOpacity>
               </View>
+
             </View>
           )}
           <View style={styles.hr}></View>

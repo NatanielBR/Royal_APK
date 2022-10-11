@@ -14,6 +14,8 @@ target 'Royal' do
 
   pod 'react-native-google-cast', :path => '../node_modules/react-native-google-cast'
 
+  pod 'react-native-background-downloader', :path => '../node_modules/react-native-background-downloader'
+
   target 'RoyalTests' do
     inherit! :complete
     # Pods for testing
