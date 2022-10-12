@@ -150,7 +150,6 @@ const Animes = ({ navigation }) => {
           </View>
         </ScrollView>
       </View>
-      {/* <BottomTab /> */}
     </View>
   );
 };
@@ -173,3 +172,4 @@ const styles = StyleSheet.create({
     paddingBottom: 48,
   },
 });
+

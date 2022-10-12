@@ -33,7 +33,6 @@ const Series = ({ navigation }) => {
   return (
     <View style={styles.body}>
       <Header />
-
       <View style={{ flex: 1, width: '100%', paddingBottom: 16 }}>
         <ScrollView style={{ width: '100%', flex: 1 }}>
           <View style={styles.seriesRow}>

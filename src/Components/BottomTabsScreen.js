@@ -243,40 +243,37 @@ const Tabs = () => {
         }}
       />
 
+
       <Tab.Screen
-        name="AnimeD"
-        component={AnimesD}
+        name="Ani"
+        getComponent={() => AnimesD}
         options={{
+
           headerShown: false,
+
           tabBarIcon: ({ focused }) => (
-            <TouchableOpacity
-              onPress={() => {
-                // safePopToTop(navigation);
-                navigation.navigate('Animes');
-              }}>
-              <View style={styles.tabPart}>
-                <Image
-                  source={AnimeIcon}
-                  style={{
-                    width: 23,
-                    height: 23,
-                    tintColor: focused
-                      ? `${Color.tabActive}`
-                      : `${Color.tabInactive}`,
-                  }}
-                />
-                <Text
-                  style={{
-                    color: focused
-                      ? `${Color.tabActive}`
-                      : `${Color.tabInactive}`,
-                    fontWeight: '500',
-                    fontSize: 10,
-                  }}>
-                  Anime
-                </Text>
-              </View>
-            </TouchableOpacity>
+            <View style={styles.tabPart}>
+              <Image
+                source={AnimeIcon}
+                style={{
+                  width: 23,
+                  height: 23,
+                  tintColor: focused
+                    ? `${Color.tabActive}`
+                    : `${Color.tabInactive}`,
+                }}
+              />
+              <Text
+                style={{
+                  color: focused
+                    ? `${Color.tabActive}`
+                    : `${Color.tabInactive}`,
+                  fontWeight: '500',
+                  fontSize: 10,
+                }}>
+                Animes
+              </Text>
+            </View>
           ),
         }}
       />
@@ -331,6 +328,7 @@ const styles = StyleSheet.create({
   tabPart: {
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 10,
     top: 1,
   },
 });

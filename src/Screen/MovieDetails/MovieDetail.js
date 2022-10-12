@@ -16,6 +16,7 @@ import FastImage from 'react-native-fast-image';
 
 import GoogleCast, {
   CastButton,
+  useCastState,
   useRemoteMediaClient,
 } from 'react-native-google-cast';
 
@@ -316,6 +317,8 @@ const MovieDetail = ({ navigation, route }) => {
       setVideoUrl(null);
     }
 
+
+
     /* //let urlVideo = 'https://suzihaza.com/v/2dl2zf26k-8wgqq'; // fembed
         //urlVideo = 'https://sbfull.com/e/dxfvlu4qanjx'; // streamSb
         //urlVideo = 'https://dood.to/e/zeb6gsq889qs'; // dood
@@ -333,11 +336,25 @@ const MovieDetail = ({ navigation, route }) => {
         setVideoUrl(urlStream); */
   }
 
-  function cast(video) {
-    GoogleCast.getCastState().then(res => console.log(res));
-    GoogleCast.castMedia(video);
-    GoogleCast.showExpandedControls();
+  const castState = useCastState()
+  const client = useRemoteMediaClient()
+
+  // function cast(video) {
+  //   GoogleCast.getCastState().then(res => console.log(res, 'res'));
+  //   GoogleCast.castMedia(video);
+  //   GoogleCast.showExpandedControls();
+  // }
+
+
+  function cast() {
+    client
+      ?.loadMedia({ autoplay: true, mediaInfo: { contentUrl: videoUrl, contentType: 'video/mp4' } })
+
+
+    GoogleCast.showExpandedControls()
   }
+
+
 
   function registerListeners() {
     const events =
@@ -355,6 +372,8 @@ const MovieDetail = ({ navigation, route }) => {
     //registerListeners();
     console.log(playerVisible);
   }, [playerId]);
+
+
 
   function MyComponent() {
     // This will automatically rerender when client is connected to a device
@@ -463,16 +482,15 @@ const MovieDetail = ({ navigation, route }) => {
                 )}
 
 
-
-
-
                 <View
                   style={{
                     flexDirection: 'row',
                     alignSelf: 'center',
                     marginTop: 10,
+                    marginLeft: 10
                   }}>
                   <CastButton
+                    onPress={() => cast()}
                     style={{ width: 24, height: 24, tintColor: 'white' }}
                   />
                   {/* 
@@ -483,59 +501,61 @@ const MovieDetail = ({ navigation, route }) => {
                   <Text style={{ color: 'white', marginLeft: 8 }}>
                     Cast do Filme{' '}
                   </Text>
+
+
+
+                  <TouchableOpacity
+                    style={{
+
+                      marginLeft: 40,
+                      // position: 'relative',
+
+
+
+                    }}
+                    onPress={() => {
+                      const fileName = Item.title.replace(':', '') + '.mp4';
+                      const destPath =
+                        RNFetchBlob.fs.dirs.DownloadDir + '/' + fileName;
+
+                      // const config = {
+                      //     fileCache: true,
+                      //     path: destPath,
+                      //     addAndroidDownloads: {
+                      //         title: destPath,
+                      //         useDownloadManager: true, // without this it works < android 10 , but crashes in android 10
+                      //         notification: true,
+                      //         mime: mimeType,
+                      //         mediaScannable: true,
+                      //     }
+                      // };
+
+                      PermissionsAndroid.request(
+                        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                      ).then(granted => {
+                        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                          RNFetchBlob.config({
+                            fileCache: true,
+                            path: destPath,
+                            addAndroidDownloads: {
+                              path: destPath, // path needed duplicating here
+                              useDownloadManager: true, // without this it works < android 10 , but crashes in android 10
+                              notification: true,
+                              title: playerName,
+                              mediaScannable: true,
+                            },
+                          }).fetch('GET', videoUrl, headers);
+                        }
+                      });
+
+                      // RNFetchBlob.config(config).fetch()
+                    }}>
+                    <Text style={{ color: 'white', marginLeft: 8 }}> {'Download'} </Text>
+                  </TouchableOpacity>
                 </View>
 
 
-                <TouchableOpacity
-                  style={{
 
-                    position: 'relative',
-                    left: 20,
-                    right: 0,
-                    top: -22,
-
-
-                  }}
-                  onPress={() => {
-                    const fileName = Item.title.replace(':', '') + '.mp4';
-                    console.log('Clicando ' + fileName);
-                    const destPath =
-                      RNFetchBlob.fs.dirs.DownloadDir + '/' + fileName;
-
-                    // const config = {
-                    //     fileCache: true,
-                    //     path: destPath,
-                    //     addAndroidDownloads: {
-                    //         title: destPath,
-                    //         useDownloadManager: true, // without this it works < android 10 , but crashes in android 10
-                    //         notification: true,
-                    //         mime: mimeType,
-                    //         mediaScannable: true,
-                    //     }
-                    // };
-
-                    PermissionsAndroid.request(
-                      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                    ).then(granted => {
-                      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                        RNFetchBlob.config({
-                          fileCache: true,
-                          path: destPath,
-                          addAndroidDownloads: {
-                            path: destPath, // path needed duplicating here
-                            useDownloadManager: true, // without this it works < android 10 , but crashes in android 10
-                            notification: true,
-                            title: playerName,
-                            mediaScannable: true,
-                          },
-                        }).fetch('GET', videoUrl, headers);
-                      }
-                    });
-
-                    // RNFetchBlob.config(config).fetch()
-                  }}>
-                  <Text style={{ color: 'white', marginLeft: 8 }}> {'Download'} </Text>
-                </TouchableOpacity>
               </View>
 
             </View>
@@ -554,7 +574,6 @@ const MovieDetail = ({ navigation, route }) => {
                 <View style={styles.seasonContainer}>
                   {seasons.length > 0 ? (
                     seasons.map(item => {
-                      console.log(item);
                       return (
                         <Animatable.View
                           animation="bounceIn"
@@ -610,8 +629,8 @@ const MovieDetail = ({ navigation, route }) => {
             />
           )}
         </View>
-      </ScrollView>
-    </View>
+      </ScrollView >
+    </View >
   );
 };
 
