@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  Button,
   Image,
   PermissionsAndroid,
   ScrollView,
@@ -13,11 +14,13 @@ import { WebView } from 'react-native-webview';
 import RNBackgroundDownloader from 'react-native-background-downloader';
 import * as Animatable from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
+import { MenuProvider } from 'react-native-popup-menu';
 
 import GoogleCast, {
   CastButton,
   useCastState,
   useRemoteMediaClient,
+
 } from 'react-native-google-cast';
 
 import Header from '../../Components/Header';
@@ -110,7 +113,7 @@ const MovieDetail = ({ navigation, route }) => {
                 Accept: 'application/json',
                 'User-Agent': 'axios 0.21.1',
               },
-            },
+            }
           );
           setSeasons(request.data.seasonsEpisodes.Seasons);
           return request;
@@ -124,8 +127,7 @@ const MovieDetail = ({ navigation, route }) => {
     // noinspection JSIgnoredPromiseFromCall
     loadVideo();
 
-    navigation.addListener('beforeRemove', data => {
-    });
+    navigation.addListener('beforeRemove', (data) => { });
   }, [navigation, Item]);
 
   const BG = {
@@ -139,7 +141,7 @@ const MovieDetail = ({ navigation, route }) => {
       https://suzihaza.com/v/p18p6smpzw7-67l
     */
 
-  const onStateChange = useCallback(state => {
+  const onStateChange = useCallback((state) => {
     if (state === 'ended') {
       setPlaying(false);
     }
@@ -156,7 +158,7 @@ const MovieDetail = ({ navigation, route }) => {
       let id = urls[urls.length - 1];
       return await axios
         .post(`https://vanfem.com/api/source/${id}`, {})
-        .then(res => {
+        .then((res) => {
           return res.data.data[0].file;
         });
     } catch (error) {
@@ -180,7 +182,7 @@ const MovieDetail = ({ navigation, route }) => {
   async function processDood(url) {
     let url_base = 'https://dood.to/';
 
-    let [md5Url, urlPart2] = await axios.get(url).then(res => {
+    let [md5Url, urlPart2] = await axios.get(url).then((res) => {
       let html = res.data;
 
       return [
@@ -195,11 +197,9 @@ const MovieDetail = ({ navigation, route }) => {
           Referer: url,
         },
       })
-      .then(res => {
+      .then((res) => {
         return res.data;
       });
-
-
 
     return urlPart + doodRandomstr(10) + urlPart2 + Date.now() / 100;
   }
@@ -213,15 +213,15 @@ const MovieDetail = ({ navigation, route }) => {
             'Mozilla/5.0 (Linux; Android 7.0; SM-G892A Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/60.0.3112.107 Mobile Safari/537.36 ',
         },
       })
-      .then(res => {
+      .then((res) => {
         let html = res.data;
         return [
           html
             .match(RegExp('<script>[\\r\\n\\s\\S]+?</script>', 'g'))
             .join('')
             .match(RegExp("&token=([^s]*)'\\)"))[1],
-          RegExp(`<div\\s+id="ideoolink"[\\s\\w="':;]+>(.+)</div>`, 'g').exec(
-            html,
+          RegExp('<div\\s+id="ideoolink"[\\s\\w="\':;]+>(.+)</div>', 'g').exec(
+            html
           )[1],
         ];
       });
@@ -238,16 +238,20 @@ const MovieDetail = ({ navigation, route }) => {
   let task = RNBackgroundDownloader.download({
     id: 'file123',
     url: 'https://link-to-very.large/file.zip',
-    destination: `${RNBackgroundDownloader.directories.documents}/file.zip`
-  }).begin((expectedBytes) => {
-    console.log(`Going to download ${expectedBytes} bytes!`);
-  }).progress((percent) => {
-    console.log(`Downloaded: ${percent * 100}%`);
-  }).done(() => {
-    console.log('Download is done!');
-  }).error((error) => {
-    console.log('Download canceled due to error: ', error);
-  });
+    destination: `${RNBackgroundDownloader.directories.documents}/file.zip`,
+  })
+    .begin((expectedBytes) => {
+      console.log(`Going to download ${expectedBytes} bytes!`);
+    })
+    .progress((percent) => {
+      console.log(`Downloaded: ${percent * 100}%`);
+    })
+    .done(() => {
+      console.log('Download is done!');
+    })
+    .error((error) => {
+      console.log('Download canceled due to error: ', error);
+    });
 
   // Pause the task
   task.pause();
@@ -256,7 +260,7 @@ const MovieDetail = ({ navigation, route }) => {
   task.resume();
 
   // Cancel the task
-  task.stop()
+  task.stop();
 
   async function loadVideo() {
     try {
@@ -317,8 +321,6 @@ const MovieDetail = ({ navigation, route }) => {
       setVideoUrl(null);
     }
 
-
-
     /* //let urlVideo = 'https://suzihaza.com/v/2dl2zf26k-8wgqq'; // fembed
         //urlVideo = 'https://sbfull.com/e/dxfvlu4qanjx'; // streamSb
         //urlVideo = 'https://dood.to/e/zeb6gsq889qs'; // dood
@@ -336,8 +338,8 @@ const MovieDetail = ({ navigation, route }) => {
         setVideoUrl(urlStream); */
   }
 
-  const castState = useCastState()
-  const client = useRemoteMediaClient()
+  const castState = useCastState();
+  const client = useRemoteMediaClient();
 
   // function cast(video) {
   //   GoogleCast.getCastState().then(res => console.log(res, 'res'));
@@ -345,35 +347,43 @@ const MovieDetail = ({ navigation, route }) => {
   //   GoogleCast.showExpandedControls();
   // }
 
-
   function cast() {
-    client
-      ?.loadMedia({ autoplay: true, mediaInfo: { contentUrl: videoUrl, contentType: 'video/mp4' } })
+    client?.loadMedia({
+      autoplay: true,
 
+      mediaInfo: { contentUrl: videoUrl, contentType: 'video/mp4' },
+    });
 
-    GoogleCast.showExpandedControls()
+    GoogleCast.showExpandedControls();
   }
 
-
-
   function registerListeners() {
-    const events =
-      `SESSION_STARTING SESSION_STARTED SESSION_START_FAILED SESSION_SUSPENDED SESSION_RESUMING SESSION_ENDING SESSION_ENDED MEDIA_STATUS_UPDATED MEDIA_PLAYBACK_STARTED MEDIA_PLAYBACK_ENDED MEDIA_PROGRESS_UPDATED CHANNEL_CONNECTED CHANNEL_DISCONNECTED CHANNEL_MESSAGE_RECIEVED`
-        .trim()
-        .split(/\s+/);
+    const events = `
+    SESSION_STARTING SESSION_STARTED SESSION_START_FAILED SESSION_SUSPENDED
+    SESSION_RESUMING SESSION_RESUMED SESSION_ENDING SESSION_ENDED
+    MEDIA_STATUS_UPDATED MEDIA_PLAYBACK_STARTED MEDIA_PLAYBACK_ENDED MEDIA_PROGRESS_UPDATED
+    CHANNEL_CONNECTED CHANNEL_DISCONNECTED CHANNEL_MESSAGE_RECEIVED
+  `
+      .trim()
+      .split(/\s+/);
 
-    events.forEach(event =>
-      GoogleCast.EventEmitter.addListener(GoogleCast[event]),
-    );
+    // events.forEach(event => {
+    //   GoogleCast.EventEmitter.addListener(GoogleCast[event]);
+    // });
+
+    const list = events.forEach((event) => {
+      GoogleCast.onCastStateChanged((event) => {
+        console.log(event);
+      })
+    });
+
   }
 
   useEffect(() => {
     loadVideo();
-    //registerListeners();
+    registerListeners();
     console.log(playerVisible);
   }, [playerId]);
-
-
 
   function MyComponent() {
     // This will automatically rerender when client is connected to a device
@@ -387,13 +397,16 @@ const MovieDetail = ({ navigation, route }) => {
         mediaInfo: {
           contentUrl:
             'https://commondatastorage.googleapis.com/gtv-videos-bucket/CastVideos/mp4/BigBuckBunny.mp4',
-          /* 
+          /*
           contentUrl:
             'https://commondatastorage.googleapis.com/gtv-videos-bucket/CastVideos/mp4/BigBuckBunny.mp4', */ //videoUrl
         },
       });
     }
   }
+
+
+
 
   return (
     <View style={styles.body}>
@@ -403,7 +416,8 @@ const MovieDetail = ({ navigation, route }) => {
           <Animatable.View
             style={styles.posterContainer}
             animation="bounceIn"
-            iterationCount={1}>
+            iterationCount={1}
+          >
             <FastImage
               resizeMode="cover"
               source={final}
@@ -420,8 +434,6 @@ const MovieDetail = ({ navigation, route }) => {
             <Text style={styles.overviewTxt}>{Item.plot}</Text>
           </View>
 
-
-
           {Type ? (
             <View />
           ) : (
@@ -431,14 +443,16 @@ const MovieDetail = ({ navigation, route }) => {
                 height: '100%',
                 marginBottom: 80,
                 maxHeight: 250,
-              }}>
+              }}
+            >
               <View
                 style={{
                   flexDirection: 'row',
                   paddingHorizontal: '20%',
                   padding: 3,
                   marginBottom: 4,
-                }}>
+                }}
+              >
                 {playerIdArray.map((item, i) => (
                   <TouchableOpacity
                     style={{
@@ -454,7 +468,8 @@ const MovieDetail = ({ navigation, route }) => {
                       setPlayerId(item.playerId);
                       setPlayerName(item.player.name);
                       // setPlayerName(item.player.link);
-                    }}>
+                    }}
+                  >
                     <Text> {item.player.name} </Text>
                   </TouchableOpacity>
                 ))}
@@ -468,7 +483,8 @@ const MovieDetail = ({ navigation, route }) => {
                   maxHeight: 250,
                   marginBottom: 0,
                   display: playerVisible,
-                }}>
+                }}
+              >
                 {playerName ? (
                   <WebView
                     source={{
@@ -476,42 +492,76 @@ const MovieDetail = ({ navigation, route }) => {
                       headers: headers,
                     }}
                     allowsFullscreenVideo={true}
-                    style={{ flex: 1, width: '100%', height: '100%' }}></WebView>
+                    style={{ flex: 1, width: '100%', height: '100%' }}
+                  />
                 ) : (
                   <View />
                 )}
-
 
                 <View
                   style={{
                     flexDirection: 'row',
                     alignSelf: 'center',
                     marginTop: 10,
-                    marginLeft: 10
-                  }}>
+                    marginLeft: 10,
+                  }}
+                >
                   <CastButton
                     onPress={() => cast()}
                     style={{ width: 24, height: 24, tintColor: 'white' }}
                   />
-                  {/* 
-                  <TouchableOpacity>
-                    <Text style={{ color: '#fff', marginLeft: 10 }}>download</Text>
-                  </TouchableOpacity> */}
+
+                  {client && (
+                    <MenuProvider>
+                      <Menu
+                        options={[
+                          { text: 'Play Now', onPress: () => cast(video) },
+                          {
+                            text: 'Play Next',
+                            onPress: async () => {
+                              const status = await client.getMediaStatus()
+                              client
+                                .queueInsertItem(
+                                  {
+                                    mediaInfo: video.toMediaInfo(),
+                                  },
+                                  status && status.queueItems.length > 2
+                                    ? status.queueItems[1].itemId
+                                    : undefined
+                                )
+                                .catch(console.warn)
+                            },
+                          },
+                          {
+                            text: 'Add to Queue',
+                            onPress: () =>
+                              client
+                                .queueInsertItem({
+                                  mediaInfo: video.toMediaInfo(),
+                                })
+                                .catch(console.warn),
+                          },
+                          { text: 'Cancel', style: 'cancel' },
+                        ]}
+                      >
+                      </Menu>
+                    </MenuProvider>
+                  )}
+
+
+
+
+                  {/* <Button title='Abrir o player' onPress={() => GoogleCast.showExpandedControls()} /> */}
+
 
                   <Text style={{ color: 'white', marginLeft: 8 }}>
                     Cast do Filme{' '}
                   </Text>
 
-
-
                   <TouchableOpacity
                     style={{
-
                       marginLeft: 40,
                       // position: 'relative',
-
-
-
                     }}
                     onPress={() => {
                       const fileName = Item.title.replace(':', '') + '.mp4';
@@ -531,8 +581,8 @@ const MovieDetail = ({ navigation, route }) => {
                       // };
 
                       PermissionsAndroid.request(
-                        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                      ).then(granted => {
+                        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+                      ).then((granted) => {
                         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                           RNFetchBlob.config({
                             fileCache: true,
@@ -549,18 +599,18 @@ const MovieDetail = ({ navigation, route }) => {
                       });
 
                       // RNFetchBlob.config(config).fetch()
-                    }}>
-                    <Text style={{ color: 'white', marginLeft: 8 }}> {'Download'} </Text>
+                    }}
+                  >
+                    <Text style={{ color: 'white', marginLeft: 8 }}>
+                      {' '}
+                      {'Download'}{' '}
+                    </Text>
                   </TouchableOpacity>
                 </View>
-
-
-
               </View>
-
             </View>
           )}
-          <View style={styles.hr}></View>
+          <View style={styles.hr} />
           {Type ? (
             <View style={styles.seasonsBox}>
               <Text style={styles.seasonTxt}>Temporadas</Text>
@@ -570,30 +620,34 @@ const MovieDetail = ({ navigation, route }) => {
                   width: '100%',
                   height: 250,
                   marginTop: 2,
-                }}>
+                }}
+              >
                 <View style={styles.seasonContainer}>
                   {seasons.length > 0 ? (
-                    seasons.map(item => {
+                    seasons.map((item) => {
                       return (
                         <Animatable.View
                           animation="bounceIn"
                           iterationCount={1}
                           key={item.id}
-                          style={styles.seasonCard}>
+                          style={styles.seasonCard}
+                        >
                           <TouchableOpacity
                             onPress={() => {
                               navigation.navigate('Episodes', {
                                 Data: item,
                               });
                             }}
-                            style={styles.seasonBtn}>
+                            style={styles.seasonBtn}
+                          >
                             <Text
                               style={{
                                 fontSize: 16,
                                 fontWeight: '400',
                                 color: '#fff',
                                 marginBottom: 16,
-                              }}>
+                              }}
+                            >
                               Temporada {item.season}{' '}
                             </Text>
                             <Text
@@ -601,7 +655,8 @@ const MovieDetail = ({ navigation, route }) => {
                                 fontSize: 14,
                                 fontWeight: '400',
                                 color: '#fff',
-                              }}>
+                              }}
+                            >
                               {item.name}
                             </Text>
                           </TouchableOpacity>
@@ -614,7 +669,8 @@ const MovieDetail = ({ navigation, route }) => {
                         fontSize: 16,
                         fontWeight: '400',
                         color: '#fff',
-                      }}>
+                      }}
+                    >
                       Empty
                     </Text>
                   )}
@@ -629,8 +685,8 @@ const MovieDetail = ({ navigation, route }) => {
             />
           )}
         </View>
-      </ScrollView >
-    </View >
+      </ScrollView>
+    </View>
   );
 };
 

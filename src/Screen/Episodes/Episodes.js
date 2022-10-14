@@ -59,6 +59,8 @@ const Episodes = ({ navigation, route }) => {
     }
   }
 
+
+
   async function processFembed(url) {
     try {
       let urls = url.split('/');
@@ -114,6 +116,8 @@ const Episodes = ({ navigation, route }) => {
     return urlPart + doodRandomstr(10) + urlPart2 + Date.now() / 100;
   }
 
+
+
   async function processStreamTape(url) {
     let [token, urlPart] = await axios
       .get(url, {
@@ -146,6 +150,7 @@ const Episodes = ({ navigation, route }) => {
   }
 
 
+
   const BG = {
     uri: `https://image.tmdb.org/t/p/original${episodePoster}`,
     priority: FastImage.priority.normal,
@@ -153,7 +158,93 @@ const Episodes = ({ navigation, route }) => {
 
   const final = BG;
 
+  async function loadVideo() {
+    try {
+      let urlVideo = '';
+      let urlStream = '';
 
+      switch (playerName) {
+        case 'Fembed':
+          urlVideo = `https://suzihaza.com/v/${playerId}`;
+          urlStream = await processFembed(urlVideo);
+
+          ToastAndroid.show(urlVideo, ToastAndroid.LONG);
+
+          // console.log('URL-VIDEO: ' + urlVideo);
+          // console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
+          setHeaders({
+            Referer: urlVideo,
+            origin: playerLink,
+          });
+          setVideoUrl(urlStream);
+          break;
+
+        case 'StreamSb':
+          urlVideo = `https://sbfull.com/e/${playerId}`;
+          urlStream = await processStreamTape(urlVideo);
+          ToastAndroid.show(urlVideo, ToastAndroid.LONG);
+
+          // console.log('URL-VIDEO: ' + urlVideo);
+          // console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
+          setHeaders({
+            Referer: urlVideo, //origin: playerLink,
+          });
+          setVideoUrl(urlStream);
+          break;
+
+        case 'Dood':
+          urlVideo = `https://dood.to/e/${playerId}`;
+          urlStream = await processDood(urlVideo);
+          ToastAndroid.show(urlVideo, ToastAndroid.LONG);
+
+          // console.log('URL-VIDEO: ' + urlVideo);
+          // console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
+          setHeaders({
+            Referer: urlVideo,
+          });
+          setVideoUrl(urlStream);
+          break;
+
+        default:
+          return;
+      }
+
+      setPlayerVisible('flex');
+    } catch (e) {
+      ToastAndroid.show('Error in load video', ToastAndroid.LONG);
+      setPlayerVisible('none');
+      setHeaders({});
+      setVideoUrl(null);
+    }
+
+    /* //let urlVideo = 'https://suzihaza.com/v/2dl2zf26k-8wgqq'; // fembed
+        //urlVideo = 'https://sbfull.com/e/dxfvlu4qanjx'; // streamSb
+        //urlVideo = 'https://dood.to/e/zeb6gsq889qs'; // dood
+        //let urlVideo = `https://suzihaza.com/v/p18p6smpzw7-67l`; //steamtape
+        //urlStream = await processStreamTape(urlVideo); // basta remover https://suzihaza.com/v/
+        //let urlStream = await processFembed(urlVideo); // basta remover https://suzihaza.com/v/
+        urlStream = await processDood(urlVideo); // basta remover https://suzihaza.com/v/
+        ToastAndroid.show(urlVideo, ToastAndroid.LONG);
+        console.log('URL-VIDEO: ' + urlVideo);
+        console.log(`URL-STREAM: ${String.raw`${urlStream}`}`);
+
+        setHeaders({
+          Referer: urlVideo,
+        });
+        setVideoUrl(urlStream); */
+  }
+
+  useEffect(() => {
+    fetchs();
+    loadVideo();
+  }, []);
+
+
+
+  console.log(final)
+
+
+  console.log(videoUrl)
 
   return (
     <View style={styles.body}>
@@ -193,7 +284,7 @@ const Episodes = ({ navigation, route }) => {
           <View style={styles.posterContainer}>
             <FastImage
               resizeMode="cover"
-              source={final}
+              source={{ uri: final.uri }}
               style={styles.poster}
             />
           </View>
@@ -240,17 +331,14 @@ const Episodes = ({ navigation, route }) => {
                 return (
                   <TouchableOpacity
                     onPress={() => {
-                      /* let Id = item.playerId.split(',');
-                      let Link = item.playerLink.split(',');
-                      setPlayerId(Id[0]);
-                      setPlayerLink(Link[0]); */
+
                     }}
                     key={item.id}
                     style={styles.episodeCard}>
                     <View style={styles.posterEpisodeContainer}>
                       <FastImage
                         resizeMode="cover"
-                        source={final}
+                        source={{ uri: final.uri }}
                         style={styles.poster}
                       />
                     </View>
