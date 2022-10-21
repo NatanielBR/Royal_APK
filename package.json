@@ -25,7 +25,7 @@
     "react-native-fast-image": "^8.5.11",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.6.1",
-    "react-native-google-cast": "^4.5.0",
+    "react-native-google-cast": "4.4.1",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-popup-menu": "^0.16.1",
     "react-native-push-notification": "^8.1.1",
