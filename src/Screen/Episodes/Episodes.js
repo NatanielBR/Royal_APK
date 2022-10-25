@@ -227,37 +227,6 @@ const Episodes = ({ navigation, route }) => {
       <Header />
       <View style={styles.container}>
 
-        <View
-          style={{
-            flexDirection: "row",
-            paddingHorizontal: "20%",
-            padding: 3,
-            marginBottom: 4,
-          }}>
-          {playerIdArray?.filter((item) => {
-            return item.player.name !== undefined;
-          }).map((item, i) => (
-            <TouchableOpacity
-              style={{
-                backgroundColor: "#fff",
-                paddingHorizontal: 20,
-                paddingVertical: 4,
-                marginHorizontal: 8,
-                borderRadius: 4,
-                marginBottom: 4,
-              }}
-              key={i}
-              onPress={() => {
-                setPlayerId(item.playerId);
-                setPlayerName(item.player.name);
-                setPlayerLink(item.player.link);
-                loadVideo();
-              }}>
-              <Text> {item.player.name} </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
         <View style={styles.warnTxt}>
           <Text style={styles.warnTxt1}>
             Episódios da {Data.season}ª Temporada{" "}
@@ -289,12 +258,42 @@ const Episodes = ({ navigation, route }) => {
           </View>
         </View>
 
+        <View
+          style={{
+            flexDirection: "row",
+            paddingHorizontal: "20%",
+            padding: 3,
+            // marginBottom: 4,
+          }}>
+          {playerIdArray?.filter((item) => {
+            return item.player.name !== undefined;
+          }).map((item, i) => (
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#fff",
+                paddingHorizontal: 20,
+                paddingVertical: 4,
+                marginHorizontal: 8,
+                borderRadius: 4,
+                // marginBottom: 4,
+              }}
+              key={i}
+              onPress={() => {
+                setPlayerId(item.playerId);
+                setPlayerName(item.player.name);
+                setPlayerLink(item.player.link);
+                loadVideo();
+              }}>
+              <Text> {item.player.name} </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
         <ScrollView
           horizontal
           style={{
             width: "100%",
             // height: 250,
-            marginTop: 2,
           }}
           contentContainerStyle={{ minWidth: 150 }}
         >
