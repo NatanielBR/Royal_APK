@@ -306,6 +306,7 @@ const Episodes = ({ navigation, route }) => {
                 <TouchableOpacity
                   onPress={() => {
                     // setPlayerIdArray(JSON.parse(item.playerId));
+                    // TODO: Tem que remover isso
                     setPlayerIdArray([
                       {
                         "audio": "Dublado",
