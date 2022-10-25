@@ -78,10 +78,12 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   episodesContainer: {
+    flex: 1,
+    flexDirection: 'row',
     width: '100%',
-    height: 234,
-    paddingHorizontal: 10,
-    marginTop: 16,
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   episodeCard: {
     width: 160,
