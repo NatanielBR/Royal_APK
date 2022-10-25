@@ -281,6 +281,7 @@ const Episodes = ({ navigation, route }) => {
               onPress={() => {
                 setPlayerId(item.playerId);
                 setPlayerName(item.player.name);
+                console.log(item);
                 setPlayerLink(item.player.link);
                 loadVideo();
               }}>
@@ -304,7 +305,14 @@ const Episodes = ({ navigation, route }) => {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    setPlayerIdArray(JSON.parse(item.playerId));
+                    // setPlayerIdArray(JSON.parse(item.playerId));
+                    setPlayerIdArray([
+                      {
+                        "audio": "Dublado",
+                        "player": { "link": "https://vanfem.com", "name": "Fembed" },
+                        "playerId": "https://vanfem.com/v/nq8m7a2yg75p5zd",
+                      },
+                    ]);
                   }}
                   key={item.id}
                   style={styles.episodeCard}>
