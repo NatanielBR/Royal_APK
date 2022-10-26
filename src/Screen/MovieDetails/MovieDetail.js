@@ -5,26 +5,19 @@ import {
   Image,
   PermissionsAndroid,
   ScrollView,
+  Share,
   StatusBar,
   Text,
   ToastAndroid,
   TouchableOpacity,
   View,
-  Share,
 } from "react-native";
 import { WebView } from "react-native-webview";
 import RNBackgroundDownloader from "react-native-background-downloader";
 import * as Animatable from "react-native-animatable";
 import FastImage from "react-native-fast-image";
-import { MenuProvider } from "react-native-popup-menu";
 
-import GoogleCast, {
-  CastButton,
-  Device,
-  useRemoteMediaClient,
-  RemoteMediaClient, MediaStreamType, useCastDevice,
-
-} from "react-native-google-cast";
+import GoogleCast, { CastButton, MediaStreamType, useRemoteMediaClient } from "react-native-google-cast";
 
 import Header from "../../Components/Header";
 import MovieRow from "../../Components/MovieRow";
@@ -37,9 +30,6 @@ import endPoints from "../../API/EndPoints";
 import BackIcon from "../../Assets/Icons/left-arrow.png";
 import trailerIcon from "../../Assets/Icons/youtube.png";
 import RNFetchBlob from "rn-fetch-blob";
-import { assertSourceType } from "@babel/core/lib/config/validation/option-assertions";
-import { setDisabled } from "react-native/Libraries/LogBox/Data/LogBoxData";
-import Video from "react-native-video";
 
 function DetailHead({ Back, Trailer }) {
   return (
@@ -609,18 +599,6 @@ const MovieDetail = ({ navigation, route }) => {
                       const fileName = Item.title.replace(":", "") + ".";
                       const destPath =
                         RNFetchBlob.fs.dirs.DownloadDir + "/" + fileName;
-
-                      // const config = {
-                      //     fileCache: true,
-                      //     path: destPath,
-                      //     addAndroidDownloads: {
-                      //         title: destPath,
-                      //         useDownloadManager: true, // without this it works < android 10 , but crashes in android 10
-                      //         notification: true,
-                      //         mime: mimeType,
-                      //         mediaScannable: true,
-                      //     }
-                      // };
 
                       PermissionsAndroid.request(
                         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
