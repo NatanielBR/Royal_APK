@@ -1,124 +1,47 @@
-import React, { useState } from 'react';
-import { Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useRef } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import {
-  NavigationContainer,
-  useNavigation,
-  NavigationProp,
-  StackActions,
-} from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer, StackActions, useNavigation } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import Color from '../Assets/ColorPallet';
+import Color from "../Assets/ColorPallet";
 
-import Home from '../Screen/Home/Home';
-import Series from '../Screen/Series/Series';
-import Animes from '../Screen/Animes/Animes';
-import Downloads from '../Screen/Downloads/Download';
-import Filmes from '../Screen/Filmes/Filmes';
-import MovieD from '../Screen/MovieDetails/MovieDetail';
-import Episodes from '../Screen/Episodes/Episodes';
+import Home from "../Screen/Home/Home";
+import Series from "../Screen/Series/Series";
+import Animes from "../Screen/Animes/Animes";
+import Filmes from "../Screen/Filmes/Filmes";
+import MovieD from "../Screen/MovieDetails/MovieDetail";
+import Episodes from "../Screen/Episodes/Episodes";
 
-import PlayIcon from '../Assets/Icons/playTranparent.png';
-import SerieIcon from '../Assets/Icons/film-reel.png';
-import DownloadsIcon from '../Assets/Icons/cloud-download.png';
-import AnimeIcon from '../Assets/Icons/anime-berserk.png';
-import HomeIcon from '../Assets/Icons/Home-filled.png';
+import PlayIcon from "../Assets/Icons/playTranparent.png";
+import SerieIcon from "../Assets/Icons/film-reel.png";
+import AnimeIcon from "../Assets/Icons/anime-berserk.png";
+import HomeIcon from "../Assets/Icons/Home-filled.png";
+import Filme from "../Screen/Filmes/Filmes";
+import { assertSourceType } from "@babel/core/lib/config/validation/option-assertions";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function FilmD() {
-  return (
-    <Stack.Navigator initialRouteName="Filmes">
-      <Stack.Screen
-        name="Filmes"
-        component={Filmes}
-        options={{ headerShown: false }}
-      />
 
-      <Stack.Screen
-        name="MovieD"
-        component={MovieD}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function SeriesD() {
-  return (
-    <NavigationContainer independent>
-      <Stack.Navigator initialRouteName="Series">
-        <Stack.Screen
-          name="Series"
-          component={Series}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="MovieD"
-          component={MovieD}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="Episodes"
-          component={Episodes}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
-function AnimesD() {
-  return (
-    <NavigationContainer independent>
-      <Stack.Navigator initialRouteName="Animes">
-        <Stack.Screen
-          name="Animes"
-          component={Animes}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="MovieD"
-          component={MovieD}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
-function HomeD() {
-  return (
-    <Stack.Navigator initialRouteName="Home">
-      <Stack.Screen
-        name="Home"
-        component={Home}
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="MovieD"
-        component={MovieD}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
+/**
+ *
+ * @param navigation
+ */
+function safePopToTop(navigation) {
+  // let actions = StackActions.popToTop();
 }
 
 const Tabs = () => {
   const navigation = useNavigation();
+
   return (
     <Tab.Navigator
       initialRouteName="HomeD"
       screenOptions={{
         tabBarStyle: {
-          position: 'absolute',
+          position: "absolute",
           height: 55,
           borderColor: Color.tabColor,
           backgroundColor: Color.tabColor,
@@ -128,17 +51,14 @@ const Tabs = () => {
       }}>
       <Tab.Screen
         name="HomeD"
-        component={HomeD}
+        component={Home}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TouchableOpacity
               onPress={() => {
-                // while (navigation.canGoBack()) {
-                //     navigation.goBack()
-                // }
-                // safePopToTop(navigation);
-                navigation.navigate('HomeD');
+                safePopToTop(navigation);
+                navigation.navigate("HomeD");
               }}>
               <View style={styles.tabPart}>
                 <Image
@@ -156,7 +76,7 @@ const Tabs = () => {
                     color: focused
                       ? `${Color.tabActive}`
                       : `${Color.tabInactive}`,
-                    fontWeight: '500',
+                    fontWeight: "500",
                     fontSize: 10,
                   }}>
                   Home
@@ -169,15 +89,15 @@ const Tabs = () => {
 
       <Tab.Screen
         name="Film"
-        component={FilmD}
+        component={Filmes}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TouchableOpacity
-              onPress={() => {
-                // safePopToTop(navigation);
-                navigation.navigate('Film');
-              }}>
+              onPress={(e) => {
+                navigation.navigate("Film")
+              }}
+            >
               <View style={styles.tabPart}>
                 <Image
                   source={PlayIcon}
@@ -194,7 +114,7 @@ const Tabs = () => {
                     color: focused
                       ? `${Color.tabActive}`
                       : `${Color.tabInactive}`,
-                    fontWeight: '500',
+                    fontWeight: "500",
                     fontSize: 10,
                   }}>
                   Filmes
@@ -206,16 +126,16 @@ const Tabs = () => {
       />
 
       <Tab.Screen
-        name="Séries"
-        component={SeriesD}
+        name="Serie"
+        component={Series}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <TouchableOpacity
               onPress={() => {
-                // safePopToTop(navigation);
-                navigation.navigate('Séries');
-              }}>
+                navigation.navigate("Serie");
+              }}
+            >
               <View style={styles.tabPart}>
                 <Image
                   source={SerieIcon}
@@ -232,7 +152,7 @@ const Tabs = () => {
                     color: focused
                       ? `${Color.tabActive}`
                       : `${Color.tabInactive}`,
-                    fontWeight: '500',
+                    fontWeight: "500",
                     fontSize: 10,
                   }}>
                   Séries
@@ -245,12 +165,10 @@ const Tabs = () => {
 
 
       <Tab.Screen
-        name="Ani"
-        getComponent={() => AnimesD}
+        name="Animes"
+        getComponent={() => Animes}
         options={{
-
           headerShown: false,
-
           tabBarIcon: ({ focused }) => (
             <View style={styles.tabPart}>
               <Image
@@ -268,7 +186,7 @@ const Tabs = () => {
                   color: focused
                     ? `${Color.tabActive}`
                     : `${Color.tabInactive}`,
-                  fontWeight: '500',
+                  fontWeight: "500",
                   fontSize: 10,
                 }}>
                 Animes
@@ -316,7 +234,7 @@ export default Tabs;
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 0,
@@ -326,8 +244,8 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   tabPart: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 10,
     top: 1,
   },

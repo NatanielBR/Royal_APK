@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import React from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 
-import endPoints from '../../API/EndPoints';
+import endPoints from "../../API/EndPoints";
 
-import Header from '../../Components/Header';
-import MovieRow from '../../Components/MovieRow';
-import BottomTab from '../../Components/BottomTab';
+import Header from "../../Components/Header";
+import MovieRow from "../../Components/MovieRow";
 
-import Colors from '../../Assets/ColorPallet';
+import Colors from "../../Assets/ColorPallet";
 
 const Filmes = () => {
   const fecthes = {

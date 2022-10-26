@@ -1,24 +1,21 @@
-import React from 'react';
-import { createNavigationContainerRef, NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Welcome from '../Screen/Welcome/Welcome';
-import SignUp from '../Screen/SignUp/SignUp';
-import Login from '../Screen/Login/Login';
-import Home from '../Screen/Home/Home';
-import MovieDetail from '../Screen/MovieDetails/MovieDetail';
-import Anime from '../Screen/Animes/Animes';
-import Filme from '../Screen/Filmes/Filmes';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Home from "../Screen/Home/Home";
+import MovieDetail from "../Screen/MovieDetails/MovieDetail";
+import Animes from "../Screen/Animes/Animes";
+import Filmes from "../Screen/Filmes/Filmes";
 
 
-import Download from '../Screen/Downloads/Download';
-import Serie from '../Screen/Series/Series';
-import Trailer from '../Screen/TrailerView/Youtube';
-import VideoP from '../Screen/VideoPlayer/Video';
-import More from '../Screen/More/More';
-import Episodes from '../Screen/Episodes/Episodes';
+import Download from "../Screen/Downloads/Download";
+import Series from "../Screen/Series/Series";
+import Trailer from "../Screen/TrailerView/Youtube";
+import VideoP from "../Screen/VideoPlayer/Video";
+import More from "../Screen/More/More";
+import Episodes from "../Screen/Episodes/Episodes";
 
-import Tabs from '../Components/BottomTabsScreen';
-import Lista from '../Screen/Lista';
+import Tabs from "../Components/BottomTabsScreen";
+import Lista from "../Screen/Lista";
 
 const Stack = createNativeStackNavigator();
 
@@ -71,19 +68,19 @@ const Routes = () => {
 
         <Stack.Screen
           name="Filmes"
-          component={Filme}
+          component={Filmes}
           options={{ headerShown: false }}
         />
 
         <Stack.Screen
           name="Series"
-          component={Serie}
+          component={Series}
           options={{ headerShown: false }}
         />
 
         <Stack.Screen
           name="Animes"
-          component={Anime}
+          component={Animes}
           options={{ headerShown: false }}
         />
 
