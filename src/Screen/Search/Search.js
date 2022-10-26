@@ -1,29 +1,20 @@
-import React, { useContext, useState } from 'react';
-import {
-  Text,
-  View,
-  Modal,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-  ActivityIndicator,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import * as Animatable from 'react-native-animatable';
-import { BlurView } from '@react-native-community/blur';
+import React, { useContext, useState } from "react";
+import { ActivityIndicator, Image, Modal, ScrollView, TextInput, TouchableOpacity, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import * as Animatable from "react-native-animatable";
+import { BlurView } from "@react-native-community/blur";
 
-import styles from './Style';
-import { moreContext } from '../../Context/ContextApi';
+import styles from "./Style";
+import { moreContext } from "../../Context/ContextApi";
 
-import Logo from '../../Assets/Logo/Logo-Royal-Prime_TH1.png';
-import CloseIcon from '../../Assets/Icons/close-cross.png';
-import SearchIcon from '../../Assets/Icons/search.png';
+import Logo from "../../Assets/Logo/Logo-Royal-Prime_TH1.png";
+import CloseIcon from "../../Assets/Icons/close-cross.png";
+import SearchIcon from "../../Assets/Icons/search.png";
 
-import MoviePoster from '../../Components/MoviePoster';
+import MoviePoster from "../../Components/MoviePoster";
 
-import axios from '../../API/RoyalApi';
-import endPoints from '../../API/EndPoints';
+import axios from "../../API/RoyalApi";
+import endPoints from "../../API/EndPoints";
 
 function SearchedContent({
   posterImage,
@@ -38,6 +29,7 @@ function SearchedContent({
   return (
     <TouchableOpacity
       onPress={() => {
+        navigation.goBack()
         navigation.navigate(goTo, { Item: data, url: endPoints.action });
       }}>
       <MoviePoster
@@ -60,7 +52,7 @@ const Menu = () => {
 
   const handleSearch = async () => {
     setLoading(true);
-    const res = await axios
+    await axios
       .get(`${endPoints.byTitle}${toQuery}`, {
         headers: {
           Accept: 'application/json',
