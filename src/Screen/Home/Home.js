@@ -30,9 +30,6 @@ import axios from "../../API/RoyalApi";
 import endPoints from "../../API/EndPoints";
 import { MyListContext } from "../../Context/MyListContext";
 import Youtube from "../TrailerView/Youtube";
-import { assertSourceType } from "@babel/core/lib/config/validation/option-assertions";
-
-const hash1 = "5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25";
 
 function truncate(str, n) {
   return str?.length > n ? str.substr(0, n - 1) + "..." : str;
@@ -51,9 +48,8 @@ export default function Home() {
   const navigation = useNavigation();
   const { handleSetMyList } = useContext(MyListContext);
   const [banner, setBanner] = useState([]);
-  const [random, setRandom] = useState([]);
   const [rand, setRand] = useState([]);
-  const [stat, setStat] = useState([]);
+  const [stat] = useState([]);
   const [playTrailer, setPlayTrailer] = useState(false);
   const [toggleRandom, setToggleRandom] = useState(false);
   const [bannerDisplay, setBannerDisplay] = useState("none");
@@ -85,9 +81,6 @@ export default function Home() {
           getRandomSafe(request.data.results.rows.length)
           ],
       );
-      console.log("aaaaaaaaaaaaaaaaaa");
-      console.log(request.data.results.rows);
-      console.log(request.data.results.rows[getRandomSafe(request.data.results.rows.length)]);
       setBanner(
         request.data.results.rows[
           getRandomSafe(request.data.results.rows.length)
@@ -111,9 +104,6 @@ export default function Home() {
     }
     navigation.navigate("MovieD", { Item: rand });
     setToggleRandom(!toggleRandom);
-  };
-  const m = () => {
-    navigation.navigate("MoreOf", { itemId: 50, genre: "Action" });
   };
 
   const final = {
