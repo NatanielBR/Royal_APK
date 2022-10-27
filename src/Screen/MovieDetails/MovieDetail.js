@@ -458,7 +458,9 @@ const MovieDetail = ({ navigation, route }) => {
                   marginBottom: 4,
                 }}
               >
-                {playerIdArray.map((item, i) => (
+                {playerIdArray.filter((a)=>{
+                  return a.player.name !== undefined
+                }).map((item, i) => (
                   <TouchableOpacity
                     style={{
                       backgroundColor: "#fff",
