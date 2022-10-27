@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "425287969058",
+    "project_id": "approyalapp",
+    "storage_bucket": "approyalapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425287969058:android:e29e1ea79fb5eab42c9d7b",
+        "android_client_info": {
+          "package_name": "com.royalapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425287969058-b253r6gqbihe1458gt1hfgeettiuc8b6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.royalapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "425287969058-7toudo01p7kr372objpmtcieka65gccq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5u6UbnFo8_ZwiOvUPEuRqD7cxEcotRNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425287969058-7toudo01p7kr372objpmtcieka65gccq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
