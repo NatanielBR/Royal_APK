@@ -13,7 +13,6 @@ import {
   View,
 } from "react-native";
 import { WebView } from "react-native-webview";
-import RNBackgroundDownloader from "react-native-background-downloader";
 import * as Animatable from "react-native-animatable";
 import FastImage from "react-native-fast-image";
 
@@ -83,15 +82,18 @@ const MovieDetail = ({ navigation, route }) => {
           "User-Agent": "axios 0.21.1",
         },
       });
-      let Id = JSON.parse(Item.playerId);
-      let Link = Item.playerLink.split(",");
-      setPlayerIdArray(Id);
 
-      for (let index = 0; index < Id.length; index++) {
-        if (Id[index] === "" || Link[index] === "") {
-        } else if (Id[index] !== "" && Link[index] !== "") {
-          /* setPlayerId(Id[index]);
-                    setPlayerLink(Link[index]); */
+      if (Item.playerId !== undefined) {
+        let Id = JSON.parse(Item.playerId);
+        let Link = Item.playerLink.split(",");
+        setPlayerIdArray(Id);
+
+        for (let index = 0; index < Id.length; index++) {
+          if (Id[index] === "" || Link[index] === "") {
+          } else if (Id[index] !== "" && Link[index] !== "") {
+            /* setPlayerId(Id[index]);
+                      setPlayerLink(Link[index]); */
+          }
         }
       }
       return request;
@@ -232,32 +234,29 @@ const MovieDetail = ({ navigation, route }) => {
     );
   }
 
-  let task = RNBackgroundDownloader.download({
-    id: "file123",
-    url: "https://link-to-very.large/file.zip",
-    destination: `${RNBackgroundDownloader.directories.documents}/file.zip`,
-  })
-    .begin((expectedBytes) => {
-      console.log(`Going to download ${expectedBytes} bytes!`);
-    })
-    .progress((percent) => {
-      console.log(`Downloaded: ${percent * 100}%`);
-    })
-    .done(() => {
-      console.log("Download is done!");
-    })
-    .error((error) => {
-      console.log("Download canceled due to error: ", error);
-    });
-
-  // Pause the task
-  task.pause();
-
-  // Resume after pause
-  task.resume();
-
-  // Cancel the task
-  task.stop();
+  // let task = RNBackgroundDownloader.download({
+  //   id: "file123",
+  //   url: "https://link-to-very.large/file.zip",
+  //   destination: `${RNBackgroundDownloader.directories.documents}/file.zip`,
+  // }).begin((expectedBytes) => {
+  //     console.log(`Going to download ${expectedBytes} bytes!`);
+  //   }).progress((percent) => {
+  //     console.log(`Downloaded: ${percent * 100}%`);
+  //   }).done(() => {
+  //     console.log("Download is done!");
+  //   })
+  //   .error((error) => {
+  //     console.log("Download canceled due to error: ", error);
+  //   });
+  //
+  // // Pause the task
+  // task.pause();
+  //
+  // // Resume after pause
+  // task.resume();
+  //
+  // // Cancel the task
+  // task.stop();
 
   async function loadVideo() {
     try {
@@ -379,9 +378,9 @@ const MovieDetail = ({ navigation, route }) => {
               'https://commondatastorage.googleapis.com/gtv-videos-bucket/CastVideos/mp4/BigBuckBunny.mp4', */ //videoUrl
           },
         }).catch((reason) => {
-        	Share.share({
-        	message: JSON.stringify(reason)
-        	})
+          Share.share({
+            message: JSON.stringify(reason),
+          });
         });
       }
     }
@@ -415,7 +414,7 @@ const MovieDetail = ({ navigation, route }) => {
   }, [playerId]);
   return (
     <View style={styles.body}>
-      <Header />
+      <Header actualItem={Item} typeItem={Type} />
       <ScrollView style={styles.scrollBody}>
         <View style={styles.container}>
           <Animatable.View
@@ -458,8 +457,8 @@ const MovieDetail = ({ navigation, route }) => {
                   marginBottom: 4,
                 }}
               >
-                {playerIdArray.filter((a)=>{
-                  return a.player.name !== undefined
+                {playerIdArray.filter((a) => {
+                  return a.player.name !== undefined;
                 }).map((item, i) => (
                   <TouchableOpacity
                     style={{

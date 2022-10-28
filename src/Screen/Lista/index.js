@@ -10,32 +10,22 @@ import ImageClose from '../../Assets/Icons/left-arrow.png';
 
 export default function Lista() {
   const [listStorage, setListStorage] = useState([]);
-  const { myList } = useContext(MyListContext);
   const navigation = useNavigation();
 
 
-  // useEffect(() => {
-  //   async function fetchListStorage() {
-  //     const request = await AsyncStorage.getItem('myList');
+  useEffect(() => {
+    async function fetchListStorage() {
+      const myList = await AsyncStorage.getItem('myList');
 
-
-  //     console.log(request)
-  //     // setListStorage(JSON.parse(request));
-  //   }
-  //   fetchListStorage();
-  // }, []);
-
-  console.log('listStorage', myList);
-
-
+      setListStorage(Object.values(JSON.parse(myList)));
+    }
+    fetchListStorage();
+  }, []);
 
   return (
     <View style={styles.body}>
 
       <SafeAreaView styles={{ flex: 1, height: 50, width: '100%' }}>
-
-
-
 
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.btnBack}>
@@ -51,7 +41,7 @@ export default function Lista() {
       <ScrollView
         overScrollMode="never">
         <View style={{ flexDirection: 'row', flex: 1, flexWrap: 'wrap' }}>
-          {myList?.map((movie, index) => {
+          {listStorage?.map((movie, index) => {
             return (
               <TouchableOpacity
                 key={index}
@@ -59,6 +49,7 @@ export default function Lista() {
                   navigation.navigate('MovieD', {
                     Item: movie,
                     ID: movie.Imdbid,
+                    Type: movie.typeItem
                   });
                 }}>
                 <MoviePoster
