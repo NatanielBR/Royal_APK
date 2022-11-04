@@ -568,18 +568,18 @@ const MovieDetail = ({ navigation, route }) => {
                   {/*  </MenuProvider>*/}
                   {/*)}*/}
 
-                  <Button title="Abrir o player" onPress={async () => {
-                    let items = (await GoogleCast.discoveryManager.getDevices());
+                  {/*<Button title="Abrir o player" onPress={async () => {*/}
+                  {/*  let items = (await GoogleCast.discoveryManager.getDevices());*/}
 
-                    let text = "Items: " + items.length + "\n";
-                    items.forEach((item) => {
-                      text += "   " + item.name + "\n";
-                      text += "   " + item.deviceId + "\n";
-                    });
+                  {/*  let text = "Items: " + items.length + "\n";*/}
+                  {/*  items.forEach((item) => {*/}
+                  {/*    text += "   " + item.name + "\n";*/}
+                  {/*    text += "   " + item.deviceId + "\n";*/}
+                  {/*  });*/}
 
-                    text += "#######";
-                    ToastAndroid.show(text, ToastAndroid.SHORT);
-                  }} />
+                  {/*  text += "#######";*/}
+                  {/*  ToastAndroid.show(text, ToastAndroid.SHORT);*/}
+                  {/*}} />*/}
 
                   {chromecastVisible ? (
                     <CastButton
