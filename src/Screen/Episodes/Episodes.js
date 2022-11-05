@@ -1,4 +1,4 @@
-import { Dimensions, ScrollView, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import styles from "./Styles";
 import axios from "../../API/RoyalApi";
@@ -9,9 +9,8 @@ import EndPoints from "../../API/EndPoints";
 import { WebView } from "react-native-webview";
 import FastImage from "react-native-fast-image";
 
-const Episodes = ({ navigation, route }) => {
-  const { Data, Update } = route.params;
-  const { width, height } = Dimensions.get("screen");
+const Episodes = ({ route }) => {
+  const { Data} = route.params;
 
   // Codigo do video Player
   const [videoUrl, setVideoUrl] = useState("");
@@ -22,9 +21,6 @@ const Episodes = ({ navigation, route }) => {
 
   const [episodes, setEpisodes] = useState([]);
   const [episodePoster, setEpisodePoster] = useState("");
-  const [playerId, setPlayerId] = useState("");
-  const [playerLink, setPlayerLink] = useState("");
-  const [playerName, setPlayerName] = useState("");
 
   async function fetchs() {
     console.log(`${EndPoints.seriesRel}${Data.seriesImdbid}&${Data.season}`);
@@ -134,21 +130,19 @@ const Episodes = ({ navigation, route }) => {
     );
   }
 
-  const BG = {
+  const final = {
     uri: `https://image.tmdb.org/t/p/original${episodePoster}`,
     priority: FastImage.priority.normal,
   };
 
-  const final = BG;
-
-  async function loadVideo() {
+  async function loadVideo(playerName, playerId, playerLink) {
     try {
       let urlVideo = "";
       let urlStream = "";
 
       switch (playerName) {
         case "Fembed":
-          urlVideo = `https://suzihaza.com/v/${playerId}`;
+          urlVideo = `${playerId}`;
           urlStream = await processFembed(urlVideo);
 
           ToastAndroid.show(urlVideo, ToastAndroid.LONG);
@@ -163,7 +157,7 @@ const Episodes = ({ navigation, route }) => {
           break;
 
         case "StreamSb":
-          urlVideo = `https://sbfull.com/e/${playerId}`;
+          urlVideo = `${playerId}`;
           urlStream = await processStreamTape(urlVideo);
           ToastAndroid.show(urlVideo, ToastAndroid.LONG);
 
@@ -176,7 +170,7 @@ const Episodes = ({ navigation, route }) => {
           break;
 
         case "Dood":
-          urlVideo = `https://dood.to/e/${playerId}`;
+          urlVideo = `${playerId}`;
           urlStream = await processDood(urlVideo);
           ToastAndroid.show(urlVideo, ToastAndroid.LONG);
 
@@ -219,7 +213,6 @@ const Episodes = ({ navigation, route }) => {
 
   useEffect(() => {
     fetchs();
-    loadVideo();
   }, []);
 
   return (
@@ -244,7 +237,7 @@ const Episodes = ({ navigation, route }) => {
               marginBottom: 0,
               display: playerVisible,
             }}>
-            {playerName ? (
+            {videoUrl ? (
               <WebView
                 source={{
                   uri: videoUrl,
@@ -279,11 +272,7 @@ const Episodes = ({ navigation, route }) => {
               }}
               key={i}
               onPress={() => {
-                setPlayerId(item.playerId);
-                setPlayerName(item.player.name);
-                console.log(item);
-                setPlayerLink(item.player.link);
-                loadVideo();
+                loadVideo(item.player.name, item.playerId, item.player.link);
               }}>
               <Text> {item.player.name} </Text>
             </TouchableOpacity>
@@ -305,15 +294,7 @@ const Episodes = ({ navigation, route }) => {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    // setPlayerIdArray(JSON.parse(item.playerId));
-                    // TODO: Tem que remover isso
-                    setPlayerIdArray([
-                      {
-                        "audio": "Dublado",
-                        "player": { "link": "https://vanfem.com", "name": "Fembed" },
-                        "playerId": "https://vanfem.com/v/nq8m7a2yg75p5zd",
-                      },
-                    ]);
+                    setPlayerIdArray(JSON.parse(item.playerId));
                   }}
                   key={item.id}
                   style={styles.episodeCard}>
@@ -335,7 +316,8 @@ const Episodes = ({ navigation, route }) => {
         </ScrollView>
       </View>
     </View>
-  );
+  )
+    ;
 };
 
 export default Episodes;
