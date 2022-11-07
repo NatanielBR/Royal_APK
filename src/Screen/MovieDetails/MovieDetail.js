@@ -215,8 +215,6 @@ const MovieDetail = ({ navigation, route }) => {
                           item.playerId, item.player.name
                         );
 
-                        console.log(response);
-
                         if (response.videoUrl != null) {
                           setHeaders(response.headers)
                           setVideoUrl(response.videoUrl)
