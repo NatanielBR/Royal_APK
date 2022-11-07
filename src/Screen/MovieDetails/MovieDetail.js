@@ -1,21 +1,14 @@
 /* eslint-disable */
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  Image,
-  PermissionsAndroid,
-  ScrollView,
-  Share,
-  StatusBar,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
-  View,
-} from "react-native";
+// noinspection JSObjectNullOrUndefined
+
+import React, { useEffect, useState } from "react";
+import { PermissionsAndroid, ScrollView, Share, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import { WebView } from "react-native-webview";
 import * as Animatable from "react-native-animatable";
 import FastImage from "react-native-fast-image";
 
-import GoogleCast, { CastButton, MediaStreamType, useRemoteMediaClient } from "react-native-google-cast";
+// noinspection ES6UnusedImports
+import GoogleCast, { CastButton, MediaStreamType, useRemoteMediaClient, RemoteMediaClient } from "react-native-google-cast";
 
 import Header from "../../Components/Header";
 import MovieRow from "../../Components/MovieRow";
@@ -24,55 +17,16 @@ import styles from "./Style";
 
 import axios from "../../API/RoyalApi";
 import endPoints from "../../API/EndPoints";
-
-import BackIcon from "../../Assets/Icons/left-arrow.png";
-import trailerIcon from "../../Assets/Icons/youtube.png";
 import RNFetchBlob from "rn-fetch-blob";
 import VideoApi from "../../API/VideoApi";
-
-function DetailHead({ Back, Trailer }) {
-  return (
-    <View style={styles.header}>
-      <StatusBar
-        translucent={true}
-        barStyle="light-content"
-        backgroundColor={"transparent"}
-      />
-      <TouchableOpacity onPress={Back} style={{ width: 40, height: 20 }}>
-        <Image
-          source={BackIcon}
-          style={{ width: "60%", height: "100%", tintColor: "white" }}
-        />
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={Trailer} style={{ width: 40, height: 30 }}>
-        <Image
-          source={trailerIcon}
-          style={{ width: "90%", height: "80%", tintColor: "white" }}
-        />
-      </TouchableOpacity>
-    </View>
-  );
-}
 
 const MovieDetail = ({ navigation, route }) => {
   //
   const [playerIdArray, setPlayerIdArray] = useState([]);
-  const [playerId, setPlayerId] = useState("");
-  const [playerName, setPlayerName] = useState("");
-
-  const [playerLink, setPlayerLink] = useState("");
-
-  //
   const [seasons, setSeasons] = useState([]);
-
-  //
+  // noinspection JSUnusedLocalSymbols
   const [suggested, setSuggested] = useState();
-
-  //YouTube Trailer play State
-  const [playing, setPlaying] = useState(false);
-
-  const { Item, ID, url, Type } = route.params;
+  const { Item, url, Type } = route.params;
 
   useEffect(() => {
     async function fetchs() {
@@ -124,26 +78,14 @@ const MovieDetail = ({ navigation, route }) => {
     mode();
     // noinspection JSIgnoredPromiseFromCall
 
-    navigation.addListener("beforeRemove", (data) => {
+    navigation.addListener("beforeRemove", () => {
     });
   }, [navigation, Item]);
 
-  const BG = {
+  const final = {
     uri: `https://image.tmdb.org/t/p/original${Item.poster}`,
     priority: FastImage.priority.normal,
   };
-
-  const final = BG;
-
-  /*
-      https://suzihaza.com/v/p18p6smpzw7-67l
-    */
-
-  const onStateChange = useCallback((state) => {
-    if (state === "ended") {
-      setPlaying(false);
-    }
-  }, []);
 
   // Codigo do video Player
   const [videoUrl, setVideoUrl] = useState("");
@@ -179,7 +121,7 @@ const MovieDetail = ({ navigation, route }) => {
         ToastAndroid.show("Não é possivel usar a função cast para essa fonte", ToastAndroid.LONG);
         GoogleCast.sessionManager.endCurrentSession(false);
         // setCasted(false);
-      } else if (videoLength != -1) {
+      } else if (videoLength !== -1) {
         // Send the media to your Cast device as soon as we connect to a device
         // (though you'll probably want to call this later once user clicks on a video or something)
         // setCasted(true);
@@ -207,25 +149,6 @@ const MovieDetail = ({ navigation, route }) => {
   //   GoogleCast.castMedia(video);
   //   GoogleCast.showExpandedControls();
   // }
-
-  function registerListeners() {
-    const events = `
-    SESSION_STARTING SESSION_STARTED SESSION_START_FAILED SESSION_SUSPENDED
-    SESSION_RESUMING SESSION_RESUMED SESSION_ENDING SESSION_ENDED
-    MEDIA_STATUS_UPDATED MEDIA_PLAYBACK_STARTED MEDIA_PLAYBACK_ENDED MEDIA_PROGRESS_UPDATED
-    CHANNEL_CONNECTED CHANNEL_DISCONNECTED CHANNEL_MESSAGE_RECEIVED
-  `
-      .trim()
-      .split(/\s+/);
-
-    // events.forEach(event => {
-    //   GoogleCast.EventEmitter.addListener(GoogleCast[event]);
-    // });
-  }
-
-  useEffect(() => {
-    registerListeners();
-  }, [playerId]);
   return (
     <View style={styles.body}>
       <Header actualItem={Item} typeItem={Type} />
@@ -442,7 +365,7 @@ const MovieDetail = ({ navigation, route }) => {
                               path: destPath, // path needed duplicating here
                               useDownloadManager: true, // without this it works < android 10 , but crashes in android 10
                               notification: true,
-                              title: playerName,
+                              title: Item.title,
                               mediaScannable: true,
                             },
                           }).fetch("GET", videoUrl, headers);
