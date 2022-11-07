@@ -1,5 +1,5 @@
 apply plugin: "com.android.application"
-apply plugin: 'com.google.gms.google-services'  
+apply plugin: 'com.google.gms.google-services'
 
 // Apply the Crashlytics Gradle plugin
 apply plugin: 'com.google.firebase.crashlytics'
@@ -214,7 +214,7 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:30.4.1')
 
-    
+
 
     implementation "com.google.android.gms:play-services-cast-framework:21.0.0"
 
