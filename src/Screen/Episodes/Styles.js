@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '40%',
     maxHeight: 240,
-    backgroundColor: 'gray',
     marginBottom: 24,
   },
   posterContainer: {
