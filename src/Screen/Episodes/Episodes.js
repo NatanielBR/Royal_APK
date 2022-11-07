@@ -290,7 +290,7 @@ const Episodes = ({ route }) => {
           <View style={[styles.episodesContainer]}>
             {episodes?.filter((item) => {
               return item.playerId !== undefined;
-            }).map(item => {
+            }).sort((a: {name: String}, b: {name: String}) => a.name.localeCompare(b.name)).map(item => {
               return (
                 <TouchableOpacity
                   onPress={() => {
