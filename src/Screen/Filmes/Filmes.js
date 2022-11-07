@@ -10,12 +10,12 @@ import Colors from "../../Assets/ColorPallet";
 
 const Filmes = () => {
   const fecthes = {
-    action: `${endPoints.genre}ação`,
-    adventure: `${endPoints.genre}aventura`,
-    comedy: `${endPoints.genre}comédia`,
-    terror: `${endPoints.genre}terror`,
-    drama: `${endPoints.genre}drama`,
-    documentaries: `${endPoints.genre}documentário`,
+    action: `${endPoints.genre}Ação`,
+    adventure: `${endPoints.genre}Aventura`,
+    comedy: `${endPoints.genre}Comédia`,
+    terror: `${endPoints.genre}Terror`,
+    drama: `${endPoints.genre}Drama`,
+    documentaries: `${endPoints.genre}Documentário`,
   };
 
   console.log(fecthes.action)
