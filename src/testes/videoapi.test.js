@@ -12,7 +12,7 @@ test("Process Fembed", async () => {
 
 
 test("Process StreamTape", async () => {
-  let url = "https://streamtape.com/v/d3Kk1JLXXeCkRPD/%5BDollars_Fansub%5D_KILL_la_KILL_-_01_%5BH264%5D%5BAAC%5D%5BHDTV%5D%5B10bit%5D%5BBF014FD4%5D.filewarez.tv.mkv";
+  let url = "https://streamtape.com/v/Zyly2Og1ZLiq2gW/Minions.2.A.Origem.de.Gru.2022.1080p.BRRip.DD5.1.x264-SURGE.DUAL-GoT.mkv.mp4";
 
   let result = await VideoApi.processStreamTape(url);
   let data = await axios.head(result)
