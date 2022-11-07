@@ -11,7 +11,7 @@ import FastImage from "react-native-fast-image";
 import VideoApi from "../../API/VideoApi";
 
 const Episodes = ({ route }) => {
-  const { Data} = route.params;
+  const { Data } = route.params;
 
   // Codigo do video Player
   const [videoUrl, setVideoUrl] = useState("");
@@ -54,6 +54,31 @@ const Episodes = ({ route }) => {
   useEffect(() => {
     fetchs();
   }, []);
+
+  /**
+   * Irá formatar o nome do episódio para ficar em um padrão só, exemplo:
+   *
+   * 1x1 -> 1x01
+   * 1x2 -> 1x02
+   * 1x5 -> 1x05
+   * 1x10 -> 1x10
+   * 1x15 -> 1x15
+   * 1x47 -> 1x47
+   * @param {String} name
+   * @return {String}
+   */
+  function formatName(name) {
+    let parts = name.split("x", 2);
+    let newName = parts[0] + "x";
+
+    if (parts[1].length === 1) {
+      newName = newName + "0" + parts[1];
+    } else {
+      newName = newName + parts[1];
+    }
+
+    return newName;
+  }
 
   return (
     <View style={styles.body}>
@@ -114,19 +139,19 @@ const Episodes = ({ route }) => {
               onPress={() => {
                 (async () => {
                   let response = await VideoApi.loadVideo(
-                    item.playerId, item.player.name
+                    item.playerId, item.player.name,
                   );
 
                   if (response.videoUrl != null) {
-                    setHeaders(response.headers)
-                    setVideoUrl(response.videoUrl)
-                    setPlayerVisible("flex")
-                  }else {
-                    setHeaders({})
-                    setVideoUrl(null)
-                    setPlayerVisible("none")
+                    setHeaders(response.headers);
+                    setVideoUrl(response.videoUrl);
+                    setPlayerVisible("flex");
+                  } else {
+                    setHeaders({});
+                    setVideoUrl(null);
+                    setPlayerVisible("none");
                   }
-                })()
+                })();
               }}>
               <Text> {item.player.name} </Text>
             </TouchableOpacity>
@@ -144,7 +169,7 @@ const Episodes = ({ route }) => {
           <View style={[styles.episodesContainer]}>
             {episodes?.filter((item) => {
               return item.playerId !== undefined;
-            }).sort((a: {name: String}, b: {name: String}) => a.name.localeCompare(b.name)).map(item => {
+            }).sort((a: { name: String }, b: { name: String }) => formatName(a.name).localeCompare(formatName(b.name))).map(item => {
               return (
                 <TouchableOpacity
                   onPress={() => {
